@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hiroto Terai — Shopify Frontend Engineer</title>
+<meta name="description" content="Shopifyストアの改修・機能開発から、GA4・広告の計測、改善提案まで一人で回すフロントエンドエンジニア。つくれて、数字も回せる。">
+<meta property="og:title" content="Hiroto Terai — Shopify Frontend Engineer">
+<meta property="og:description" content="つくれて、数字も回せる。Shopifyでお店の売上を伸ばすフロントエンドエンジニア。">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5f3ee">
+
+<style>
+/* ============ Fonts ============ */
+@font-face{font-family:Archivo;src:url(assets/fonts/archivo-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Archivo;src:url(assets/fonts/archivo-600.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:Archivo;src:url(assets/fonts/archivo-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:Archivo;src:url(assets/fonts/archivo-800.woff2) format("woff2");font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:"Space Mono";src:url(assets/fonts/mono-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Space Mono";src:url(assets/fonts/mono-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
+
+/* ============ Tokens ============ */
+:root{
+  --paper:#f5f3ee;
+  --ink:#191714;
+  --muted:#6f6a61;
+  --line:#d7d2c7;
+  --line-strong:#b8b2a5;
+  --accent:#d8402c;
+  --sans:Archivo,"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+  --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",-apple-system,"Noto Sans JP",sans-serif;
+  --mono:"Space Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gutter:clamp(20px,5vw,72px);
+  --maxw:1280px;
+}
+:root[data-theme=dark],
+html[data-theme=dark]{
+  --paper:#100f0d;
+  --ink:#ece7dd;
+  --muted:#928c80;
+  --line:#2c2a26;
+  --line-strong:#3d3a34;
+  --accent:#ff5a41;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --paper:#100f0d;
+    --ink:#ece7dd;
+    --muted:#928c80;
+    --line:#2c2a26;
+    --line-strong:#3d3a34;
+    --accent:#ff5a41;
+  }
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-weight:400;
+  line-height:1.5;letter-spacing:-.006em;
+  font-feature-settings:"kern" 1;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+:lang(ja),.jp{font-family:var(--jp)}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:var(--paper)}
+
+/* ============ Layout ============ */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+.rule{border:0;border-top:1px solid var(--line)}
+.rule-strong{border-top:1px solid var(--line-strong)}
+
+.label{
+  font-family:var(--mono);font-weight:400;
+  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);
+}
+.num{font-family:var(--mono);font-weight:400;color:var(--accent)}
+
+/* section scaffold */
+.sec{padding:clamp(56px,8vw,120px) 0}
+.sec-head{
+  display:flex;align-items:baseline;gap:1.2ch;
+  padding-bottom:22px;margin-bottom:clamp(28px,4vw,56px);
+  border-bottom:1px solid var(--line-strong);
+}
+.sec-head h2{
+  font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;letter-spacing:-.02em;
+}
+.sec-head .jp-sub{color:var(--muted);font-weight:400;font-size:.95rem}
+.sec-head .idx{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.12em}
+
+/* ============ Header ============ */
+.site-head{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:saturate(1.2) blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.site-head .wrap{
+  display:flex;align-items:center;gap:1.5rem;
+  height:60px;
+}
+.brand{font-weight:700;letter-spacing:.01em;font-size:.98rem;white-space:nowrap}
+.brand .dot{color:var(--accent)}
+.nav{margin-left:auto;display:flex;gap:1.6rem;align-items:center}
+.nav a{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);position:relative;padding:4px 0;
+}
+.nav a:hover{color:var(--ink)}
+.nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--accent);transition:right .28s cubic-bezier(.2,.7,.2,1)}
+.nav a:hover::after{right:0}
+.theme-btn{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:none;border:1px solid var(--line-strong);
+  padding:5px 9px;cursor:pointer;line-height:1;
+}
+.theme-btn:hover{color:var(--ink);border-color:var(--ink)}
+.nav-hide{display:none}
+@media(max-width:720px){.nav .nav-hide{display:none}.nav{gap:1rem}}
+
+/* ============ Hero ============ */
+.hero{padding:clamp(48px,9vw,130px) 0 clamp(40px,6vw,80px)}
+.hero .kick{display:flex;gap:1.2ch;align-items:center;margin-bottom:clamp(24px,4vw,44px)}
+.hero .kick .avail{
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);border:1px solid var(--line-strong);padding:5px 10px;
+}
+.hero .kick .avail b{color:var(--accent);font-weight:700}
+.hero h1{
+  font-weight:800;letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(3rem,12.5vw,10.5rem);
+  text-transform:none;
+}
+.hero h1 .l2{display:block}
+.hero .jp-lead{
+  font-family:var(--jp);
+  margin-top:clamp(26px,4vw,44px);
+  font-size:clamp(1.15rem,2.4vw,1.7rem);font-weight:700;letter-spacing:-.01em;line-height:1.55;
+  max-width:24ch;text-wrap:balance;
+}
+.hero .jp-lead .mark{color:var(--accent)}
+.hero .meta{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:1.5rem;
+  margin-top:clamp(40px,6vw,72px);align-items:end;
+}
+.hero .meta .desc{
+  grid-column:span 7;font-family:var(--jp);color:var(--muted);
+  font-size:1rem;line-height:1.75;max-width:46ch;
+}
+.hero .meta .tags{grid-column:6/span 7;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:flex-start}
+@media(max-width:860px){
+  .hero .meta{display:block}
+  .hero .meta .tags{margin-top:26px}
+}
+.tag{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+  border:1px solid var(--line-strong);padding:6px 11px;color:var(--ink);white-space:nowrap;
+}
+
+/* ============ Work ============ */
+.work-list{border-top:1px solid var(--line-strong)}
+.work-item{
+  display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,3rem);
+  align-items:baseline;
+  padding:clamp(26px,3.4vw,42px) 0;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.work-item>.num{font-size:.85rem;padding-top:.4em}
+.work-main{min-width:0}
+.work-title{
+  font-weight:700;letter-spacing:-.025em;line-height:1;
+  font-size:clamp(1.9rem,5.2vw,3.6rem);
+  transition:color .2s;
+}
+.work-item:hover .work-title{color:var(--accent)}
+.work-sub{font-family:var(--jp);color:var(--muted);margin-top:12px;font-size:.98rem;line-height:1.7;max-width:52ch}
+.work-chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:4px 8px}
+.work-side{text-align:right;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.06em;white-space:nowrap;padding-top:.5em}
+.work-side .role{display:block;color:var(--ink)}
+.work-side .yr{display:block;margin-top:6px}
+.work-link{
+  display:inline-flex;align-items:center;gap:.6ch;margin-top:16px;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink);
+}
+.work-link .arw{color:var(--accent);transition:transform .25s}
+.work-item:hover .work-link .arw{transform:translateX(4px)}
+.work-demo{margin-top:10px;font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:.03em}
+.work-demo b{color:var(--ink);font-weight:400}
+@media(max-width:720px){
+  .work-item{grid-template-columns:auto 1fr;}
+  .work-side{grid-column:2;text-align:left;padding-top:14px}
+  .work-side .yr{margin-top:2px}
+}
+
+/* ============ Capabilities ============ */
+.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line-strong)}
+.cap-col{padding:clamp(28px,3.4vw,44px) 0}
+.cap-col:first-child{border-right:1px solid var(--line);padding-right:clamp(24px,4vw,64px)}
+.cap-col:last-child{padding-left:clamp(24px,4vw,64px)}
+.cap-col .cn{display:flex;align-items:baseline;gap:1ch;margin-bottom:8px}
+.cap-col .cn .en{font-weight:800;letter-spacing:-.02em;font-size:clamp(1.6rem,3.4vw,2.6rem)}
+.cap-col .cn .ja{font-family:var(--jp);color:var(--muted);font-weight:700;font-size:1rem}
+.cap-col .lede{font-family:var(--jp);color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:22px;max-width:36ch}
+.cap-col ul{list-style:none}
+.cap-col li{
+  font-family:var(--jp);font-size:.98rem;line-height:1.55;
+  padding:13px 0 13px 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:2.2ch 1fr;gap:.5ch;align-items:baseline;
+}
+.cap-col li .b{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
+.cap-note{
+  margin-top:clamp(28px,4vw,48px);padding-top:24px;border-top:1px solid var(--line-strong);
+  font-family:var(--jp);font-weight:700;font-size:clamp(1.05rem,2.2vw,1.45rem);letter-spacing:-.01em;
+}
+.cap-note em{font-style:normal;color:var(--accent)}
+@media(max-width:760px){
+  .cap-grid{grid-template-columns:1fr}
+  .cap-col:first-child{border-right:0;border-bottom:1px solid var(--line);padding-right:0}
+  .cap-col:last-child{padding-left:0}
+}
+
+/* ============ Experience ============ */
+.exp-item{
+  display:grid;grid-template-columns:minmax(120px,1.6fr) 3fr;gap:clamp(1rem,3vw,3rem);
+  padding:clamp(24px,3vw,40px) 0;border-top:1px solid var(--line);
+}
+.exp-item:first-child{border-top:1px solid var(--line-strong)}
+.exp-when{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--muted)}
+.exp-when .now{color:var(--accent)}
+.exp-org{font-weight:700;letter-spacing:-.02em;font-size:clamp(1.3rem,3vw,2rem);line-height:1.05}
+.exp-role{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.exp-body{font-family:var(--jp);color:var(--muted);font-size:.98rem;line-height:1.8;margin-top:14px;max-width:60ch}
+@media(max-width:680px){.exp-item{grid-template-columns:1fr;gap:.6rem}}
+
+/* ============ Skills ============ */
+.skill-grid{display:flex;flex-wrap:wrap;gap:.5rem;border-top:1px solid var(--line-strong);padding-top:clamp(28px,4vw,44px)}
+.skill{
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.02em;
+  border:1px solid var(--line-strong);padding:9px 13px;color:var(--ink);
+  transition:border-color .2s,color .2s;
+}
+.skill:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ============ About ============ */
+.about-body{
+  font-family:var(--jp);font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:700;
+  line-height:1.7;letter-spacing:-.01em;max-width:26ch;
+}
+.about-body em{font-style:normal;color:var(--accent)}
+.about-note{font-family:var(--jp);color:var(--muted);font-size:1rem;line-height:1.8;margin-top:24px;max-width:48ch}
+
+/* ============ Contact ============ */
+.contact{padding:clamp(64px,9vw,140px) 0}
+.contact h2{
+  font-weight:800;letter-spacing:-.035em;line-height:.98;
+  font-size:clamp(2.2rem,7.5vw,6rem);max-width:14ch;text-wrap:balance;
+}
+.contact .jp-line{font-family:var(--jp);color:var(--muted);font-size:1.05rem;line-height:1.8;margin-top:26px;max-width:40ch}
+.contact-links{display:flex;flex-wrap:wrap;gap:0;margin-top:clamp(36px,5vw,60px);border-top:1px solid var(--line-strong)}
+.contact-links a{
+  display:flex;align-items:center;gap:1ch;
+  padding:22px 0;flex:1 1 240px;border-bottom:1px solid var(--line);
+  font-weight:700;letter-spacing:-.01em;font-size:clamp(1.1rem,2.4vw,1.5rem);
+}
+.contact-links a+a{padding-left:clamp(20px,3vw,40px);border-left:1px solid var(--line)}
+.contact-links a .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.contact-links a .arw{color:var(--accent);margin-left:auto;transition:transform .25s}
+.contact-links a:hover .arw{transform:translate(4px,-4px)}
+.contact-links a:hover{color:var(--accent)}
+@media(max-width:640px){
+  .contact-links a+a{padding-left:0;border-left:0}
+}
+
+/* ============ Footer ============ */
+.site-foot{border-top:1px solid var(--line-strong);padding:32px 0 44px}
+.site-foot .wrap{display:flex;flex-wrap:wrap;gap:1rem;align-items:baseline}
+.site-foot .c{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
+.site-foot .avail{margin-left:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
+.site-foot .avail b{color:var(--accent);font-weight:700}
+
+/* ============ Motion (JS-gated: content is fully visible without JS) ============ */
+.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1!important;transform:none!important;transition:none}
+  *{scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <a href="#top" class="brand">HIROTO&nbsp;TERAI<span class="dot">.</span></a>
+    <nav class="nav">
+      <a href="#work" class="nav-hide">Work</a>
+      <a href="#capabilities" class="nav-hide">Capabilities</a>
+      <a href="#experience" class="nav-hide">Experience</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="テーマ切替">Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="kick reveal">
+        <span class="label">Shopify Frontend Engineer</span>
+        <span class="avail">平日3h / 休日3–5h ・ <b>即日稼働可</b></span>
+      </div>
+      <h1 class="reveal">Shopify<span class="l2">Frontend</span><span class="l2">Engineer<span class="dot" style="color:var(--accent)">.</span></span></h1>
+      <p class="jp-lead reveal">つくれて、<span class="mark">数字も回せる</span>。Shopifyでお店の売上を伸ばす人。</p>
+      <div class="meta">
+        <p class="desc reveal">見た目を整えるだけの開発では終わらせません。テーマ実装から GA4・広告の計測、改善提案まで一人で回し、「売れるストア」に近づけます。EC運営も Shopify 開発も、両方の現場を経験してきました。</p>
+        <div class="tags reveal">
+          <span class="tag">Shopify / Liquid</span>
+          <span class="tag">GA4・GTM</span>
+          <span class="tag">広告計測</span>
+          <span class="tag">CRM 実装</span>
+          <span class="tag">Core Web Vitals</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">01</span>
+        <h2>Selected Work</h2>
+        <span class="jp-sub">できることの実例</span>
+        <span class="idx">04 PROJECTS</span>
+      </div>
+      <div class="work-list">
+
+        <a class="work-item reveal" href="https://wastenot-official.com/" target="_blank" rel="noopener">
+          <span class="num">01</span>
+          <div class="work-main">
+            <div class="work-title">WASTE NOT by BRING</div>
+            <p class="work-sub">現職で開発・運用を担当しているECストア。オリジナルセクションの実装、計測設計、継続的な改善までを日々手を動かして回しています。</p>
+            <div class="work-chips"><span class="chip">Shopify</span><span class="chip">Liquid / OS 2.0</span><span class="chip">運用中</span></div>
+            <span class="work-link">サイトを見る <span class="arw">↗</span></span>
+          </div>
+          <div class="work-side"><span class="role">本業 / 開発・運用</span><span class="yr">2025—</span></div>
+        </a>
+
+        <a class="work-item reveal" href="https://keboz.jp" target="_blank" rel="noopener">
+          <span class="num">02</span>
+          <div class="work-main">
+            <div class="work-title">KEBOZ 公式ECストア</div>
+            <p class="work-sub">アパレルブランドのECサイト改修・CS・広告運用・GA4分析・改善提案までを一貫して担当。実店舗と連携したOMO、LINE／メール／アプリのCRM施策も。</p>
+            <div class="work-chips"><span class="chip">EC運営</span><span class="chip">CRM</span><span class="chip">広告 / GA4</span></div>
+            <span class="work-link">サイトを見る <span class="arw">↗</span></span>
+          </div>
+          <div class="work-side"><span class="role">EC運営 / CRM</span><span class="yr">前職</span></div>
+        </a>
+
+        <a class="work-item reveal" href="https://mystudio-fashion-ec.myshopify.com/" target="_blank" rel="noopener">
+          <span class="num">03</span>
+          <div class="work-main">
+            <div class="work-title">Apparel Store</div>
+            <p class="work-sub">個人制作のアパレルECデモ。テーマ構築・オリジナルセクション・レスポンシブ最適化を、実際に触れる形でまとめたショーケースです。</p>
+            <div class="work-chips"><span class="chip">架空 / デモ</span><span class="chip">テーマ構築</span><span class="chip">レスポンシブ</span></div>
+            <span class="work-link">デモを見る <span class="arw">↗</span></span>
+            <div class="work-demo">ストアパスワード <b>roxas0805</b></div>
+          </div>
+          <div class="work-side"><span class="role">制作 / デモ</span><span class="yr">2026</span></div>
+        </a>
+
+        <a class="work-item reveal" href="https://mystudio-fashion-ec.myshopify.com/collections/skincare" target="_blank" rel="noopener">
+          <span class="num">04</span>
+          <div class="work-main">
+            <div class="work-title">Skincare Store</div>
+            <p class="work-sub">スキンケアD2Cを想定したデモ。世界観に合わせたセクション設計と、比較表・成分・FAQなど「売れる導線」の作り込みを試作しています。</p>
+            <div class="work-chips"><span class="chip">架空 / デモ</span><span class="chip">セクション設計</span><span class="chip">導線設計</span></div>
+            <span class="work-link">デモを見る <span class="arw">↗</span></span>
+            <div class="work-demo">ストアパスワード <b>roxas0805</b></div>
+          </div>
+          <div class="work-side"><span class="role">制作 / デモ</span><span class="yr">2026</span></div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section class="sec" id="capabilities">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">02</span>
+        <h2>Capabilities</h2>
+        <span class="jp-sub">できること</span>
+        <span class="idx">BUILD × GROW</span>
+      </div>
+      <div class="cap-grid">
+        <div class="cap-col reveal">
+          <div class="cn"><span class="en">Build</span><span class="ja">つくる</span></div>
+          <p class="lede">Liquid / HTML / CSS / JavaScript で、軽く・柔軟に。</p>
+          <ul>
+            <li><span class="b">01</span><span>既存テーマ（Dawn等 OS 2.0）の改修・カスタマイズ</span></li>
+            <li><span class="b">02</span><span>オリジナルセクション・比較表・FAQ等の新規開発</span></li>
+            <li><span class="b">03</span><span>モバイル最適化・表示速度 / Core Web Vitals の改善</span></li>
+            <li><span class="b">04</span><span>ポイント／会員ランク／クーポン交換などCRM機能の実装</span></li>
+            <li><span class="b">05</span><span>JSエラー・表示崩れなど不具合の切り分けと修正</span></li>
+          </ul>
+        </div>
+        <div class="cap-col reveal">
+          <div class="cn"><span class="en">Grow</span><span class="ja">伸ばす</span></div>
+          <p class="lede">つくった先の「売上」まで見て、改善を回す。</p>
+          <ul>
+            <li><span class="b">01</span><span>GA4 / GTM / Custom Pixels の計測設計</span></li>
+            <li><span class="b">02</span><span>Meta / Google / Yahoo 広告のCV計測整備</span></li>
+            <li><span class="b">03</span><span>実機診断からの改善提案（優先度つき）</span></li>
+            <li><span class="b">04</span><span>アプリの選定・検証・導入（ノーコード機能追加）</span></li>
+            <li><span class="b">05</span><span>LINE / メール / アプリを使ったCRM施策</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="cap-note reveal">開発とグロース、<em>どちらか片方でなく両方を一人で</em>。ここが強みです。</p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="sec" id="experience">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">03</span>
+        <h2>Experience</h2>
+        <span class="jp-sub">これまで</span>
+        <span class="idx">2020 — NOW</span>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-when"><span class="now">● NOW</span><br>株式会社 STAYGOLD</div>
+        <div>
+          <div class="exp-org">Shopify開発・EC改善</div>
+          <div class="exp-role">Frontend / Shopify Engineer</div>
+          <p class="exp-body">UI/UX改修依頼への対応、オリジナルセクションの新規開発、アプリの選定・導入などストアの機能追加全般を担当。開発者目線での改善提案を自ら実装まで落とし込み、表示速度の改善、GTM/GA4の計測設計も。ネイティブアプリ連携、ポイント／会員ランク制度、ポイント⇄クーポン交換などのCRM実装、外部ベンダーの折衝・進行管理まで。</p>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-when">前職<br>アパレルブランド KEBOZ</div>
+        <div>
+          <div class="exp-org">EC運営・CRM</div>
+          <div class="exp-role">E-Commerce / CRM</div>
+          <p class="exp-body">ECサイトの改修・カスタマーサポートに加え、Web広告の運用、GA4でのアクセス解析と改善提案までを一貫して担当。実店舗と連携したOMO施策、LINE／メール／ネイティブアプリを活用したCRM施策の企画・実行にも携わりました。</p>
+        </div>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-when">Earlier</div>
+        <div>
+          <div class="exp-org">Web制作・サイト改善</div>
+          <div class="exp-role">Web Production</div>
+          <p class="exp-body">会社のメインWebサイトのリニューアル、ユーザビリティテストを通じたサイト改善に従事。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="sec" id="skills">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">04</span>
+        <h2>Skills</h2>
+        <span class="jp-sub">スキル</span>
+        <span class="idx">STACK</span>
+      </div>
+      <div class="skill-grid reveal">
+        <span class="skill">Shopify / Liquid</span>
+        <span class="skill">HTML / CSS</span>
+        <span class="skill">JavaScript</span>
+        <span class="skill">OS 2.0 セクション設計</span>
+        <span class="skill">メタフィールド / メタオブジェクト</span>
+        <span class="skill">GA4</span>
+        <span class="skill">GTM</span>
+        <span class="skill">Custom Pixels</span>
+        <span class="skill">Meta / Google / Yahoo 広告計測</span>
+        <span class="skill">Core Web Vitals</span>
+        <span class="skill">アプリ選定・導入</span>
+        <span class="skill">CRM（ポイント / ランク / クーポン）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">05</span>
+        <h2>About</h2>
+        <span class="jp-sub">人となり</span>
+      </div>
+      <p class="about-body reveal">「作って終わり」にしたくない。実装したものが本当に<em>売上につながっているか</em>、数字を見て次の一手を考える。</p>
+      <p class="about-note reveal">だから開発とグロースの両方に片足を置いてきました。オフの趣味は音楽鑑賞と料理。手を動かして少しずつ良くしていく感覚は、料理もストア改善も同じかもしれません。</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="sec-head reveal" style="border-bottom:0;margin-bottom:0;padding-bottom:0">
+        <span class="num">06</span><span class="idx" style="margin-left:0">CONTACT</span>
+      </div>
+      <h2 class="reveal">一緒に、売れるお店をつくりませんか。</h2>
+      <p class="jp-line reveal">Shopifyストアの改修・機能追加・改善のご相談を承っています。小さな修正から継続的な改善まで、お気軽にどうぞ。</p>
+      <div class="contact-links reveal">
+        <a href="mailto:hiro08051610@gmail.com"><span class="k">Email</span> hiro08051610@gmail.com <span class="arw">↗</span></a>
+        <a href="https://github.com/Hiroto-Terai" target="_blank" rel="noopener"><span class="k">GitHub</span> Hiroto-Terai <span class="arw">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <span class="c">© 2026 HIROTO TERAI</span>
+    <span class="avail">平日3h / 休日3–5h ・ <b>即日稼働可</b></span>
+  </div>
+</footer>
+
+<script>
+// Theme toggle (auto by default; button cycles light/dark and persists)
+document.documentElement.classList.add('js');
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  var saved=localStorage.getItem('theme');
+  if(saved){root.setAttribute('data-theme',saved);}
+  function meta(){var m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.body).backgroundColor;}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    var isDark = cur ? cur==='dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+    var next=isDark?'light':'dark';
+    root.setAttribute('data-theme',next);localStorage.setItem('theme',next);meta();
+  });
+  meta();
+})();
+
+// Reveal on scroll
+(function(){
+  if(!('IntersectionObserver'in window)){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  document.querySelectorAll('.reveal').forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>
