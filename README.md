@@ -1,10 +1,14 @@
-# Portfolio — Hiroto Terai
+# Portfolio — 寺井 啓人 / Hiroto Terai
 
-Shopifyフロントエンドエンジニアの個人ポートフォリオ（静的1ページ）。
+Shopifyフロントエンドエンジニアの個人ポートフォリオです（静的な1ページ）。国内の制作会社と、業務委託の発注担当の方に向けています。
 
-- **デザイン**: スイス／エディトリアル（大活字グロテスク + モノスペースのラベル、モノクロ+朱赤1色、罫線と連番）
-- **フォント**: Archivo / Space Mono（`assets/fonts/` に woff2 を同梱・外部依存なし）
-- **技術**: 素の HTML / CSS / JS。ビルド不要。ライト／ダーク自動対応。
+- **公開URL**: https://hiroto-terai.github.io/portfolio/ （英語で開くときは `?lang=en`）
+- **デザイン**: モスグリーンの地を、線で区切ったグリッド。ヒーローに散らばった図形は、カートボタン・トグル・数量ボタンなどの小さなUI部品で、クリックすると実際に動く
+- **作品の図**: スクリーンショットは使わない。各ストアをCSSで描いた小さなお店の図にしていて、画面に入ると組み上がる
+- **言語**: 日本語と英語を切り替えられる。文言は `data-l="ja"` と `data-l="en"` の要素に両方持っている
+- **テーマ**: ライト／ダーク。OSの設定に従い、ボタンでも切り替えられる。選んだものは localStorage に保存する
+- **フォント**: almond.studio の書体に寄せた Google Fonts。Hanken Grotesk（本文）、Archivo の幅を狭めたもの（名前・見出し・数字）、Newsreader（英語の一文）、Fragment Mono（ラベル）。和文は Noto Sans JP
+- **技術**: 素の HTML / CSS / JS。ビルドは不要
 - **ホスティング**: GitHub Pages
 
 ## ローカル確認
@@ -14,12 +18,14 @@ python3 -m http.server 8000
 # → http://localhost:8000
 ```
 
-`file://` で直接開いてもフォント・レイアウトは表示されます。
-
 ## 構成
 
 ```
-index.html            1ファイル完結（CSS/JS インライン）
-assets/fonts/*.woff2  Archivo(400/600/700/800) + Space Mono(400/700)
-.nojekyll             GitHub Pages の Jekyll 処理を無効化
+index.html   1ファイル完結（CSS/JS インライン）
+DESIGN.md    設計書（色・書体・レイアウト・使わないもの）
+.nojekyll    GitHub Pages の Jekyll 処理を無効化
 ```
+
+## 載せる数字
+
+実績の数値は、Lifelog リポジトリの `career/achievements.md`（実績・数値台帳）にあるものだけを使う。
