@@ -1,562 +1,1039 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hiroto Terai — Shopify Frontend Engineer</title>
-<meta name="description" content="Shopifyストアの改修・機能開発から、GA4・広告の計測、改善提案まで一人で回すフロントエンドエンジニア。つくれて、数字も回せる。">
-<meta property="og:title" content="Hiroto Terai — Shopify Frontend Engineer">
-<meta property="og:description" content="つくれて、数字も回せる。Shopifyでお店の売上を伸ばすフロントエンドエンジニア。">
+<title>寺井 啓人 | Shopifyフロントエンドエンジニア</title>
+<meta name="description" content="ECを売る側と作る側の両方を経験した、Shopifyのフロントエンドエンジニア。Figmaからの実装、UI部品、計測まで。平日朝夜と土日祝、週10〜15時間で業務委託をお受けしています。">
+<meta property="og:title" content="寺井 啓人 | Shopifyフロントエンドエンジニア">
+<meta property="og:description" content="ECを売る側と作る側の両方を経験した、Shopifyのフロントエンドエンジニア。">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#f5f3ee">
-
+<meta property="og:url" content="https://hiroto-terai.github.io/portfolio/">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#4B6541">
+<script>
+(function () {
+  var root = document.documentElement;
+  try {
+    var theme = localStorage.getItem("theme");
+    if (theme === "dark" || theme === "light") root.dataset.theme = theme;
+    var lang = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang");
+    if (lang === "en" || lang === "ja") { root.dataset.lang = lang; root.lang = lang; }
+  } catch (e) {}
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/* ============ Fonts ============ */
-@font-face{font-family:Archivo;src:url(assets/fonts/archivo-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:Archivo;src:url(assets/fonts/archivo-600.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:Archivo;src:url(assets/fonts/archivo-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:Archivo;src:url(assets/fonts/archivo-800.woff2) format("woff2");font-weight:800;font-style:normal;font-display:swap}
-@font-face{font-family:"Space Mono";src:url(assets/fonts/mono-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Space Mono";src:url(assets/fonts/mono-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
-
-/* ============ Tokens ============ */
-:root{
-  --paper:#f5f3ee;
-  --ink:#191714;
-  --muted:#6f6a61;
-  --line:#d7d2c7;
-  --line-strong:#b8b2a5;
-  --accent:#d8402c;
-  --sans:Archivo,"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
-  --jp:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",-apple-system,"Noto Sans JP",sans-serif;
-  --mono:"Space Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
-  --gutter:clamp(20px,5vw,72px);
-  --maxw:1280px;
+:root {
+  --paper: #EEF2E6;
+  --ink: #1C2418;
+  --ink-soft: #4A5644;
+  --moss: #4B6541;
+  --moss-deep: #3F5737;
+  --on-moss: #F2F6EB;
+  --on-moss-soft: #CFDAC4;
+  --line: #1C2418;
+  --line-soft: rgba(28, 36, 24, 0.16);
+  --line-on-moss: rgba(242, 246, 235, 0.4);
+  --sun: #F6C445;
+  --tomato: #EA5B3F;
+  --sky: #4F7FE3;
+  --peach: #F3A6B9;
+  --white: #FFFFFF;
+  --outline: #1C2418;
+  --focus: #4F7FE3;
+  --pad: clamp(16px, 3vw, 40px);
+  --font-display: "Bricolage Grotesque", "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
 }
-:root[data-theme=dark],
-html[data-theme=dark]{
-  --paper:#100f0d;
-  --ink:#ece7dd;
-  --muted:#928c80;
-  --line:#2c2a26;
-  --line-strong:#3d3a34;
-  --accent:#ff5a41;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme=light]){
-    --paper:#100f0d;
-    --ink:#ece7dd;
-    --muted:#928c80;
-    --line:#2c2a26;
-    --line-strong:#3d3a34;
-    --accent:#ff5a41;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1E2919;
+    --ink: #E7EDDE;
+    --ink-soft: #B3C0A7;
+    --moss: #3D5535;
+    --moss-deep: #33492C;
+    --on-moss: #EEF2E6;
+    --on-moss-soft: #C3D1B6;
+    --line: #E7EDDE;
+    --line-soft: rgba(231, 237, 222, 0.18);
+    --line-on-moss: rgba(238, 242, 230, 0.3);
+    --outline: #141B11;
+    --focus: #F6C445;
   }
 }
-
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{
-  background:var(--paper);color:var(--ink);
-  font-family:var(--sans);font-weight:400;
-  line-height:1.5;letter-spacing:-.006em;
-  font-feature-settings:"kern" 1;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-  overflow-x:hidden;
-}
-:lang(ja),.jp{font-family:var(--jp)}
-a{color:inherit;text-decoration:none}
-::selection{background:var(--accent);color:var(--paper)}
-
-/* ============ Layout ============ */
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
-.rule{border:0;border-top:1px solid var(--line)}
-.rule-strong{border-top:1px solid var(--line-strong)}
-
-.label{
-  font-family:var(--mono);font-weight:400;
-  font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted);
-}
-.num{font-family:var(--mono);font-weight:400;color:var(--accent)}
-
-/* section scaffold */
-.sec{padding:clamp(56px,8vw,120px) 0}
-.sec-head{
-  display:flex;align-items:baseline;gap:1.2ch;
-  padding-bottom:22px;margin-bottom:clamp(28px,4vw,56px);
-  border-bottom:1px solid var(--line-strong);
-}
-.sec-head h2{
-  font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;letter-spacing:-.02em;
-}
-.sec-head .jp-sub{color:var(--muted);font-weight:400;font-size:.95rem}
-.sec-head .idx{margin-left:auto;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.12em}
-
-/* ============ Header ============ */
-.site-head{
-  position:sticky;top:0;z-index:50;
-  background:color-mix(in srgb,var(--paper) 88%,transparent);
-  backdrop-filter:saturate(1.2) blur(6px);
-  border-bottom:1px solid var(--line);
-}
-.site-head .wrap{
-  display:flex;align-items:center;gap:1.5rem;
-  height:60px;
-}
-.brand{font-weight:700;letter-spacing:.01em;font-size:.98rem;white-space:nowrap}
-.brand .dot{color:var(--accent)}
-.nav{margin-left:auto;display:flex;gap:1.6rem;align-items:center}
-.nav a{
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);position:relative;padding:4px 0;
-}
-.nav a:hover{color:var(--ink)}
-.nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--accent);transition:right .28s cubic-bezier(.2,.7,.2,1)}
-.nav a:hover::after{right:0}
-.theme-btn{
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);background:none;border:1px solid var(--line-strong);
-  padding:5px 9px;cursor:pointer;line-height:1;
-}
-.theme-btn:hover{color:var(--ink);border-color:var(--ink)}
-.nav-hide{display:none}
-@media(max-width:720px){.nav .nav-hide{display:none}.nav{gap:1rem}}
-
-/* ============ Hero ============ */
-.hero{padding:clamp(48px,9vw,130px) 0 clamp(40px,6vw,80px)}
-.hero .kick{display:flex;gap:1.2ch;align-items:center;margin-bottom:clamp(24px,4vw,44px)}
-.hero .kick .avail{
-  font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink);border:1px solid var(--line-strong);padding:5px 10px;
-}
-.hero .kick .avail b{color:var(--accent);font-weight:700}
-.hero h1{
-  font-weight:800;letter-spacing:-.035em;line-height:.92;
-  font-size:clamp(3rem,12.5vw,10.5rem);
-  text-transform:none;
-}
-.hero h1 .l2{display:block}
-.hero .jp-lead{
-  font-family:var(--jp);
-  margin-top:clamp(26px,4vw,44px);
-  font-size:clamp(1.15rem,2.4vw,1.7rem);font-weight:700;letter-spacing:-.01em;line-height:1.55;
-  max-width:24ch;text-wrap:balance;
-}
-.hero .jp-lead .mark{color:var(--accent)}
-.hero .meta{
-  display:grid;grid-template-columns:repeat(12,1fr);gap:1.5rem;
-  margin-top:clamp(40px,6vw,72px);align-items:end;
-}
-.hero .meta .desc{
-  grid-column:span 7;font-family:var(--jp);color:var(--muted);
-  font-size:1rem;line-height:1.75;max-width:46ch;
-}
-.hero .meta .tags{grid-column:6/span 7;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:flex-start}
-@media(max-width:860px){
-  .hero .meta{display:block}
-  .hero .meta .tags{margin-top:26px}
-}
-.tag{
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
-  border:1px solid var(--line-strong);padding:6px 11px;color:var(--ink);white-space:nowrap;
+:root[data-theme="dark"] {
+  --paper: #1E2919;
+  --ink: #E7EDDE;
+  --ink-soft: #B3C0A7;
+  --moss: #3D5535;
+  --moss-deep: #33492C;
+  --on-moss: #EEF2E6;
+  --on-moss-soft: #C3D1B6;
+  --line: #E7EDDE;
+  --line-soft: rgba(231, 237, 222, 0.18);
+  --line-on-moss: rgba(238, 242, 230, 0.3);
+  --outline: #141B11;
+  --focus: #F6C445;
 }
 
-/* ============ Work ============ */
-.work-list{border-top:1px solid var(--line-strong)}
-.work-item{
-  display:grid;grid-template-columns:auto 1fr auto;gap:clamp(1rem,3vw,3rem);
-  align-items:baseline;
-  padding:clamp(26px,3.4vw,42px) 0;
-  border-bottom:1px solid var(--line);
-  position:relative;
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
 }
-.work-item>.num{font-size:.85rem;padding-top:.4em}
-.work-main{min-width:0}
-.work-title{
-  font-weight:700;letter-spacing:-.025em;line-height:1;
-  font-size:clamp(1.9rem,5.2vw,3.6rem);
-  transition:color .2s;
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+html[data-lang="ja"] [data-l="en"],
+html[data-lang="en"] [data-l="ja"] { display: none !important; }
+html[data-lang="en"] body { letter-spacing: 0; line-height: 1.65; }
+html[data-lang="ja"] body { word-break: auto-phrase; line-break: strict; }
+
+.skip {
+  position: absolute; left: 8px; top: -100px; z-index: 100;
+  background: var(--sun); color: #1C2418; padding: 8px 14px; border-radius: 999px;
 }
-.work-item:hover .work-title{color:var(--accent)}
-.work-sub{font-family:var(--jp);color:var(--muted);margin-top:12px;font-size:.98rem;line-height:1.7;max-width:52ch}
-.work-chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:.4rem}
-.chip{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:4px 8px}
-.work-side{text-align:right;font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.06em;white-space:nowrap;padding-top:.5em}
-.work-side .role{display:block;color:var(--ink)}
-.work-side .yr{display:block;margin-top:6px}
-.work-link{
-  display:inline-flex;align-items:center;gap:.6ch;margin-top:16px;
-  font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink);
-}
-.work-link .arw{color:var(--accent);transition:transform .25s}
-.work-item:hover .work-link .arw{transform:translateX(4px)}
-.work-demo{margin-top:10px;font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:.03em}
-.work-demo b{color:var(--ink);font-weight:400}
-@media(max-width:720px){
-  .work-item{grid-template-columns:auto 1fr;}
-  .work-side{grid-column:2;text-align:left;padding-top:14px}
-  .work-side .yr{margin-top:2px}
+.skip:focus { top: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
 }
 
-/* ============ Capabilities ============ */
-.cap-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line-strong)}
-.cap-col{padding:clamp(28px,3.4vw,44px) 0}
-.cap-col:first-child{border-right:1px solid var(--line);padding-right:clamp(24px,4vw,64px)}
-.cap-col:last-child{padding-left:clamp(24px,4vw,64px)}
-.cap-col .cn{display:flex;align-items:baseline;gap:1ch;margin-bottom:8px}
-.cap-col .cn .en{font-weight:800;letter-spacing:-.02em;font-size:clamp(1.6rem,3.4vw,2.6rem)}
-.cap-col .cn .ja{font-family:var(--jp);color:var(--muted);font-weight:700;font-size:1rem}
-.cap-col .lede{font-family:var(--jp);color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:22px;max-width:36ch}
-.cap-col ul{list-style:none}
-.cap-col li{
-  font-family:var(--jp);font-size:.98rem;line-height:1.55;
-  padding:13px 0 13px 0;border-top:1px solid var(--line);
-  display:grid;grid-template-columns:2.2ch 1fr;gap:.5ch;align-items:baseline;
+/* ---------- header ---------- */
+.bar {
+  position: sticky; top: 0; z-index: 50;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px;
+  padding: 0 var(--pad); height: 60px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
 }
-.cap-col li .b{font-family:var(--mono);font-size:.72rem;color:var(--accent)}
-.cap-note{
-  margin-top:clamp(28px,4vw,48px);padding-top:24px;border-top:1px solid var(--line-strong);
-  font-family:var(--jp);font-weight:700;font-size:clamp(1.05rem,2.2vw,1.45rem);letter-spacing:-.01em;
+.bar__name { text-decoration: none; font-weight: 700; font-size: 15px; white-space: nowrap; }
+.bar__nav { display: flex; justify-content: flex-end; gap: clamp(12px, 2vw, 28px); font-size: 14px; }
+.bar__nav a { text-decoration: none; padding: 4px 0; background: linear-gradient(var(--ink), var(--ink)) 0 100% / 0 1px no-repeat; transition: background-size 0.25s; }
+.bar__nav a:hover { background-size: 100% 1px; }
+.bar__tools { display: flex; gap: 8px; }
+.chip-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 40px; height: 34px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 999px; background: transparent;
+  cursor: pointer; font-size: 13px; font-weight: 700;
 }
-.cap-note em{font-style:normal;color:var(--accent)}
-@media(max-width:760px){
-  .cap-grid{grid-template-columns:1fr}
-  .cap-col:first-child{border-right:0;border-bottom:1px solid var(--line);padding-right:0}
-  .cap-col:last-child{padding-left:0}
-}
-
-/* ============ Experience ============ */
-.exp-item{
-  display:grid;grid-template-columns:minmax(120px,1.6fr) 3fr;gap:clamp(1rem,3vw,3rem);
-  padding:clamp(24px,3vw,40px) 0;border-top:1px solid var(--line);
-}
-.exp-item:first-child{border-top:1px solid var(--line-strong)}
-.exp-when{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--muted)}
-.exp-when .now{color:var(--accent)}
-.exp-org{font-weight:700;letter-spacing:-.02em;font-size:clamp(1.3rem,3vw,2rem);line-height:1.05}
-.exp-role{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:10px}
-.exp-body{font-family:var(--jp);color:var(--muted);font-size:.98rem;line-height:1.8;margin-top:14px;max-width:60ch}
-@media(max-width:680px){.exp-item{grid-template-columns:1fr;gap:.6rem}}
-
-/* ============ Skills ============ */
-.skill-grid{display:flex;flex-wrap:wrap;gap:.5rem;border-top:1px solid var(--line-strong);padding-top:clamp(28px,4vw,44px)}
-.skill{
-  font-family:var(--mono);font-size:.78rem;letter-spacing:.02em;
-  border:1px solid var(--line-strong);padding:9px 13px;color:var(--ink);
-  transition:border-color .2s,color .2s;
-}
-.skill:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ============ About ============ */
-.about-body{
-  font-family:var(--jp);font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:700;
-  line-height:1.7;letter-spacing:-.01em;max-width:26ch;
-}
-.about-body em{font-style:normal;color:var(--accent)}
-.about-note{font-family:var(--jp);color:var(--muted);font-size:1rem;line-height:1.8;margin-top:24px;max-width:48ch}
-
-/* ============ Contact ============ */
-.contact{padding:clamp(64px,9vw,140px) 0}
-.contact h2{
-  font-weight:800;letter-spacing:-.035em;line-height:.98;
-  font-size:clamp(2.2rem,7.5vw,6rem);max-width:14ch;text-wrap:balance;
-}
-.contact .jp-line{font-family:var(--jp);color:var(--muted);font-size:1.05rem;line-height:1.8;margin-top:26px;max-width:40ch}
-.contact-links{display:flex;flex-wrap:wrap;gap:0;margin-top:clamp(36px,5vw,60px);border-top:1px solid var(--line-strong)}
-.contact-links a{
-  display:flex;align-items:center;gap:1ch;
-  padding:22px 0;flex:1 1 240px;border-bottom:1px solid var(--line);
-  font-weight:700;letter-spacing:-.01em;font-size:clamp(1.1rem,2.4vw,1.5rem);
-}
-.contact-links a+a{padding-left:clamp(20px,3vw,40px);border-left:1px solid var(--line)}
-.contact-links a .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400}
-.contact-links a .arw{color:var(--accent);margin-left:auto;transition:transform .25s}
-.contact-links a:hover .arw{transform:translate(4px,-4px)}
-.contact-links a:hover{color:var(--accent)}
-@media(max-width:640px){
-  .contact-links a+a{padding-left:0;border-left:0}
+.chip-btn:hover { background: var(--ink); color: var(--paper); }
+.chip-btn svg { width: 16px; height: 16px; }
+.icon-moon { display: none; }
+html[data-theme="dark"] .icon-sun { display: none; }
+html[data-theme="dark"] .icon-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .icon-sun { display: none; }
+  html:not([data-theme="light"]) .icon-moon { display: block; }
 }
 
-/* ============ Footer ============ */
-.site-foot{border-top:1px solid var(--line-strong);padding:32px 0 44px}
-.site-foot .wrap{display:flex;flex-wrap:wrap;gap:1rem;align-items:baseline}
-.site-foot .c{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
-.site-foot .avail{margin-left:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
-.site-foot .avail b{color:var(--accent);font-weight:700}
-
-/* ============ Motion (JS-gated: content is fully visible without JS) ============ */
-.js .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
-.js .reveal.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  .js .reveal{opacity:1!important;transform:none!important;transition:none}
-  *{scroll-behavior:auto!important}
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 26px; border-radius: 999px;
+  background: var(--sun); color: #1C2418; text-decoration: none; font-weight: 700;
+  border: 2px solid var(--outline); box-shadow: 4px 4px 0 var(--outline);
+  transition: transform 0.15s, box-shadow 0.15s; cursor: pointer;
 }
-html{scroll-behavior:smooth}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--outline); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--outline); }
+.btn svg { width: 18px; height: 18px; }
+.btn--ghost { background: var(--white); }
+.link-out {
+  display: inline-flex; align-items: center; gap: 6px; font-weight: 700;
+  text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px;
+}
+.link-out svg { width: 14px; height: 14px; }
+
+/* ---------- hero ---------- */
+.hero { background: var(--moss); color: var(--on-moss); overflow: hidden; }
+.hero__stage { position: relative; height: clamp(280px, 36vw, 500px); }
+.hero__name {
+  margin: clamp(-90px, -6vw, -40px) 0 0; padding: 0 calc(var(--pad) - 0.04em);
+  position: relative; z-index: 2; pointer-events: none;
+  font-family: var(--font-display); font-weight: 800;
+  font-variation-settings: "wdth" 75, "opsz" 96;
+  font-size: calc((100vw - 2 * var(--pad)) / 4.25); line-height: 0.8; letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+.hero__grid {
+  display: grid; grid-template-columns: 1.6fr 1fr;
+  margin-top: clamp(28px, 4vw, 56px);
+  border-top: 1px solid var(--line-on-moss);
+}
+.hero__grid > * { padding: clamp(24px, 3vw, 40px) var(--pad); }
+.hero__grid > * + * { border-left: 1px solid var(--line-on-moss); }
+.hero__role { margin: 0 0 14px; font-size: 15px; font-weight: 500; color: var(--on-moss-soft); }
+.hero__lead {
+  margin: 0; max-width: 21em;
+  font-size: clamp(24px, 2.6vw, 36px); line-height: 1.45; font-weight: 700; letter-spacing: 0.01em;
+}
+html[data-lang="en"] .hero__lead { font-family: var(--font-display); font-weight: 700; max-width: 22em; line-height: 1.15; }
+.hero__sub { margin: 20px 0 0; max-width: 34em; color: var(--on-moss-soft); }
+.terms { margin: 0 0 28px; display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; }
+.terms dt { color: var(--on-moss-soft); font-size: 14px; }
+.terms dd { margin: 0; font-weight: 700; }
+
+/* hero parts: small working pieces of a storefront */
+.part { position: absolute; left: var(--x); top: var(--y); z-index: 1; }
+.part__push { transition: transform 0.5s cubic-bezier(0.2, 1.4, 0.4, 1); }
+.part__body {
+  transform: rotate(var(--r, 0deg));
+  animation:
+    drop 1s cubic-bezier(0.25, 1.35, 0.45, 1) var(--d, 0s) both,
+    float 5.5s ease-in-out calc(var(--d, 0s) + 1s) infinite alternate;
+}
+@keyframes drop {
+  from { transform: translateY(-115vh) rotate(calc(var(--r, 0deg) - 40deg)); }
+  to { transform: translateY(0) rotate(var(--r, 0deg)); }
+}
+@keyframes float {
+  from { transform: translateY(0) rotate(var(--r, 0deg)); }
+  to { transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 5deg)); }
+}
+.toy {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--white); color: #1C2418;
+  border: 2px solid var(--outline); box-shadow: 3px 3px 0 var(--outline);
+  user-select: none;
+}
+.toy--click { cursor: pointer; }
+.toy svg { width: 22px; height: 22px; }
+
+.t-add { height: 52px; padding: 0 22px; border-radius: 999px; background: var(--sun); font-weight: 900; font-size: 15px; }
+.t-cart { width: 66px; height: 66px; border-radius: 50%; position: relative; }
+.t-cart svg { width: 28px; height: 28px; }
+.t-cart__badge {
+  position: absolute; top: -8px; right: -8px; min-width: 28px; height: 28px; padding: 0 6px;
+  border-radius: 999px; background: var(--tomato); color: var(--white);
+  border: 2px solid var(--outline); font-size: 13px; font-weight: 900; line-height: 24px; text-align: center;
+}
+.t-cart__badge.bump { animation: bump 0.4s cubic-bezier(0.3, 1.8, 0.5, 1); }
+@keyframes bump { 50% { transform: scale(1.45); } }
+.t-toggle { width: 84px; height: 44px; border-radius: 999px; justify-content: flex-start; padding: 0 4px; transition: background 0.25s; }
+.t-toggle__knob { width: 32px; height: 32px; border-radius: 50%; background: var(--ink-soft); border: 2px solid var(--outline); transition: transform 0.3s cubic-bezier(0.3, 1.5, 0.5, 1), background 0.25s; }
+.t-toggle.on { background: var(--sky); }
+.t-toggle.on .t-toggle__knob { transform: translateX(38px); background: var(--white); }
+.t-check { width: 48px; height: 48px; border-radius: 12px; }
+.t-check path { stroke-dasharray: 30; stroke-dashoffset: 30; transition: stroke-dashoffset 0.3s ease-out; }
+.t-check.on { background: var(--sun); }
+.t-check.on path { stroke-dashoffset: 0; }
+.t-heart { width: 56px; height: 56px; border-radius: 50%; }
+.t-heart svg { width: 26px; height: 26px; transition: transform 0.3s cubic-bezier(0.3, 1.8, 0.5, 1); }
+.t-heart.on svg { transform: scale(1.15); }
+.t-heart.on path { fill: var(--tomato); }
+.t-step { height: 46px; border-radius: 999px; padding: 0 6px; gap: 0; font-weight: 900; }
+.t-step__btn { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; font-size: 20px; line-height: 1; }
+.t-step__btn:hover { background: var(--paper); }
+.t-step__num { width: 28px; text-align: center; font-size: 17px; }
+.t-dots { height: 34px; padding: 0 14px; border-radius: 999px; gap: 8px; }
+.t-dots i { width: 10px; height: 10px; border-radius: 50%; background: #C9CFC1; animation: dot 3.6s infinite; }
+.t-dots i:nth-child(2) { animation-delay: 1.2s; }
+.t-dots i:nth-child(3) { animation-delay: 2.4s; }
+@keyframes dot { 0%, 30% { background: #1C2418; width: 24px; border-radius: 6px; } 34%, 100% { background: #C9CFC1; width: 10px; } }
+.t-swatch { height: 42px; padding: 0 10px; border-radius: 999px; gap: 6px; }
+.t-swatch i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--outline); cursor: pointer; transition: transform 0.2s; }
+.t-swatch i.on { transform: scale(1.3); }
+.t-tag { padding: 8px 18px 8px 26px; border-radius: 8px 999px 999px 8px; background: var(--sky); color: var(--white); font-weight: 900; font-size: 18px; position: relative; }
+.t-tag::before { content: ""; position: absolute; left: 9px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--moss); border: 2px solid var(--outline); }
+.t-search { height: 44px; width: 170px; border-radius: 999px; justify-content: flex-start; padding: 0 14px; }
+.t-search i { flex: 1; height: 8px; border-radius: 4px; background: #DDE2D6; }
+.shape { filter: drop-shadow(3px 3px 0 var(--outline)); }
+.shape svg { width: auto; }
+
+/* ---------- sections ---------- */
+.sec {
+  display: grid; grid-template-columns: minmax(180px, 22%) 1fr;
+  border-top: 1px solid var(--line);
+}
+.sec__head { padding: clamp(28px, 4vw, 56px) var(--pad); border-right: 1px solid var(--line); }
+.sec__title { margin: 0; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.35; font-weight: 900; letter-spacing: 0.04em; }
+html[data-lang="en"] .sec__title { font-family: var(--font-display); font-weight: 700; letter-spacing: 0; }
+.sec__note { margin: 12px 0 0; font-size: 14px; color: var(--ink-soft); }
+.sec__body { min-width: 0; }
+.sec__intro { margin: 0; padding: clamp(28px, 4vw, 56px) var(--pad) 0; max-width: 40em; }
+
+/* results */
+.ledger { border-bottom: 1px solid var(--line-soft); }
+.ledger:last-child { border-bottom: 0; }
+.ledger__side { margin: 0; padding: 22px var(--pad) 0; font-weight: 700; font-size: 15px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.ledger__side small { font-weight: 500; color: var(--ink-soft); font-size: 13px; }
+.ledger__cells { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+.stat { padding: 18px var(--pad) 30px; }
+.stat + .stat { border-left: 1px solid var(--line-soft); }
+.stat__num {
+  margin: 0; font-family: var(--font-display); font-weight: 800;
+  font-variation-settings: "wdth" 80; font-size: clamp(36px, 3.4vw, 52px); line-height: 1; letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.stat__num small { font-family: var(--font-body); font-size: 0.36em; font-weight: 700; margin-left: 4px; letter-spacing: 0.02em; }
+.stat__what { margin: 14px 0 0; font-size: 14px; line-height: 1.7; }
+.stat__meta { margin: 6px 0 0; font-size: 12px; color: var(--ink-soft); }
+
+/* works */
+.work { display: grid; grid-template-columns: minmax(260px, 40%) 1fr; border-bottom: 1px solid var(--line); }
+.work:last-child { border-bottom: 0; }
+.work__art { padding: clamp(24px, 3vw, 40px) var(--pad); border-right: 1px solid var(--line-soft); }
+.work__text { padding: clamp(24px, 3vw, 40px) var(--pad); }
+.work__tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; padding: 0; list-style: none; }
+.work__tags li { padding: 2px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; font-weight: 700; }
+.work__tags li.is-main { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.work__title { margin: 0; font-family: var(--font-display); font-weight: 800; font-variation-settings: "wdth" 85; font-size: clamp(28px, 3vw, 42px); line-height: 1.1; }
+.work__summary { margin: 12px 0 0; max-width: 36em; }
+.work__list { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 15px; }
+.work__list li { padding-left: 18px; position: relative; }
+.work__list li::before { content: ""; position: absolute; left: 0; top: 0.75em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 1px solid var(--outline); }
+.work__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 22px; }
+.pass { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; }
+.pass code { font-family: var(--font-body); font-weight: 700; padding: 2px 10px; border-radius: 6px; background: var(--line-soft); }
+
+/* mini storefront, drawn with CSS instead of a screenshot */
+.shop {
+  --accent: var(--sun);
+  aspect-ratio: 4 / 3; padding: 14px; display: grid; grid-template-rows: auto 1fr auto; gap: 10px;
+  background: var(--accent); border: 2px solid var(--outline); border-radius: 18px; box-shadow: 5px 5px 0 var(--outline);
+}
+.shop > *, .shop__row > * { border: 2px solid var(--outline); background: var(--white); }
+.shop__bar { height: 26px; border-radius: 999px; display: flex; align-items: center; gap: 6px; padding: 0 10px; }
+.shop__bar b { width: 42px; height: 8px; border-radius: 4px; background: var(--outline); }
+.shop__bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--outline); margin-left: auto; }
+.shop__bar i + i { margin-left: 0; }
+.shop__hero { border-radius: 12px; position: relative; overflow: hidden; background: var(--hero, var(--paper)); }
+.shop__hero::before, .shop__hero::after { content: ""; position: absolute; left: 14px; height: 9px; border-radius: 5px; background: var(--outline); }
+.shop__hero::before { top: 16px; width: 44%; }
+.shop__hero::after { top: 32px; width: 28%; opacity: 0.5; }
+.shop__hero em { position: absolute; right: 14px; bottom: 12px; width: 34%; height: 22px; border-radius: 999px; background: var(--accent); border: 2px solid var(--outline); }
+.shop__row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border: 0; background: transparent; }
+.shop__row > * { height: 54px; border-radius: 10px; position: relative; }
+.shop__row > *::after { content: ""; position: absolute; left: 8px; bottom: 8px; width: 46%; height: 8px; border-radius: 4px; background: var(--accent); border: 1px solid var(--outline); }
+.shop > *, .shop__row > * {
+  transition: transform 0.7s cubic-bezier(0.2, 1.3, 0.4, 1), opacity 0.4s;
+}
+.js .shop:not(.is-in) > * { opacity: 0; transform: translate(var(--sx, 0), var(--sy, -40px)) rotate(var(--sr, 10deg)); }
+.js .shop:not(.is-in) .shop__row > * { opacity: 0; transform: translateY(40px) rotate(-12deg); }
+.shop__bar { --sx: -30px; --sy: -50px; --sr: -14deg; }
+.shop__hero { --sx: 40px; --sy: -30px; --sr: 8deg; transition-delay: 0.1s; }
+.shop__row > :nth-child(1) { transition-delay: 0.22s; }
+.shop__row > :nth-child(2) { transition-delay: 0.3s; }
+.shop__row > :nth-child(3) { transition-delay: 0.38s; }
+
+/* skills */
+.skills { display: grid; grid-template-columns: repeat(3, 1fr); }
+.skill { padding: clamp(24px, 3vw, 40px) var(--pad); }
+.skill + .skill { border-left: 1px solid var(--line-soft); }
+.skill__name { margin: 0; font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+html[data-lang="en"] .skill__name { font-family: var(--font-display); font-weight: 700; }
+.skill__name::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--dot); border: 2px solid var(--outline); flex: none; }
+.skill__lead { margin: 6px 0 14px; font-size: 14px; color: var(--ink-soft); }
+.skill ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 15px; line-height: 1.7; }
+.skill li { padding-top: 10px; border-top: 1px solid var(--line-soft); }
+.stack { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 var(--pad) clamp(28px, 4vw, 48px); margin: 0; list-style: none; }
+.stack li { padding: 4px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 13px; font-weight: 700; }
+
+/* process */
+.steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); counter-reset: step; }
+.steps li { padding: clamp(24px, 3vw, 40px) clamp(14px, 1.6vw, 24px); counter-increment: step; position: relative; }
+.steps li + li { border-left: 1px solid var(--line-soft); }
+.steps li::before {
+  content: counter(step); display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 16px;
+  border-radius: 50%; border: 2px solid var(--outline); background: var(--white); color: #1C2418;
+  font-family: var(--font-display); font-weight: 800; font-size: 18px;
+}
+.steps li.is-key::before { background: var(--tomato); color: var(--white); }
+.steps h3 { margin: 0 0 8px; font-size: 17px; font-weight: 900; line-height: 1.45; }
+.steps p { margin: 0; font-size: 14px; line-height: 1.75; color: var(--ink-soft); }
+.promise {
+  margin: 0; padding: clamp(22px, 2.6vw, 34px) var(--pad); border-top: 1px solid var(--line-soft);
+  font-size: clamp(17px, 1.6vw, 21px); font-weight: 700; line-height: 1.7;
+}
+
+/* career */
+.timeline { margin: 0; padding: 0; list-style: none; }
+.timeline li { display: grid; grid-template-columns: 170px 1fr; border-bottom: 1px solid var(--line-soft); }
+.timeline li:last-child { border-bottom: 0; }
+.timeline__when { padding: 26px var(--pad); font-family: var(--font-display); font-weight: 700; font-variation-settings: "wdth" 85; font-size: 18px; }
+.timeline__what { padding: 26px var(--pad) 26px 0; }
+.timeline__what h3 { margin: 0; font-size: 18px; font-weight: 900; }
+.timeline__what h3 small { font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-left: 8px; }
+.timeline__what p { margin: 6px 0 0; max-width: 40em; font-size: 15px; }
+.story { margin: 0; padding: clamp(24px, 3vw, 36px) var(--pad); border-bottom: 1px solid var(--line-soft); font-size: clamp(18px, 1.8vw, 22px); font-weight: 700; line-height: 1.7; }
+.story > span { display: block; max-width: 34em; }
+
+/* pricing */
+.price { display: grid; grid-template-columns: 1.3fr 1fr; }
+.price__list { margin: 0; padding: 0; list-style: none; }
+.price__list li { display: flex; justify-content: space-between; gap: 20px; padding: 16px var(--pad); border-bottom: 1px solid var(--line-soft); }
+.price__list li:last-child { border-bottom: 0; }
+.price__list strong { white-space: nowrap; font-family: var(--font-display); font-weight: 700; font-variation-settings: "wdth" 85; font-size: 18px; }
+.price__rate { padding: clamp(24px, 3vw, 40px) var(--pad); border-left: 1px solid var(--line-soft); }
+.price__rate p { margin: 0; }
+.price__big { font-family: var(--font-display); font-weight: 800; font-variation-settings: "wdth" 80; font-size: clamp(44px, 4.4vw, 64px); line-height: 1; }
+.price__big span { font-family: var(--font-body); font-size: 0.32em; font-weight: 700; }
+.price__rate .note { margin-top: 14px; font-size: 14px; color: var(--ink-soft); }
+.price__rate .out { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line-soft); font-size: 14px; }
+
+/* about */
+.about { display: grid; grid-template-columns: 1fr 1fr; }
+.about p { margin: 0; padding: clamp(24px, 3vw, 36px) var(--pad); font-size: 15px; }
+.about p + p { border-left: 1px solid var(--line-soft); }
+
+/* contact */
+.contact { background: var(--moss); color: var(--on-moss); padding: clamp(56px, 8vw, 120px) var(--pad); border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+.contact__title { margin: 0; font-size: clamp(30px, 4vw, 56px); line-height: 1.3; font-weight: 900; }
+html[data-lang="en"] .contact__title { font-family: var(--font-display); font-weight: 800; line-height: 1.05; }
+.contact p { max-width: 34em; color: var(--on-moss-soft); margin: 18px 0 30px; }
+.contact__row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.copy-btn { border: 1px solid var(--line-on-moss); background: transparent; color: var(--on-moss); border-radius: 999px; padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 700; }
+.copy-btn:hover { background: var(--on-moss); color: var(--moss); }
+.copy-btn .done { display: none; }
+.copy-btn.is-done .done { display: inline; }
+.copy-btn.is-done .idle { display: none; }
+.pass .copy-btn { border-color: var(--line); color: var(--ink); padding: 2px 12px; font-size: 13px; }
+.pass .copy-btn:hover { background: var(--ink); color: var(--paper); }
+.contact__deco { position: absolute; right: var(--pad); top: 50%; transform: translateY(-50%); display: grid; gap: 14px; justify-items: end; }
+
+.foot { display: flex; justify-content: space-between; gap: 16px; padding: 18px var(--pad); font-size: 13px; border-top: 1px solid var(--line-on-moss); background: var(--moss-deep); color: var(--on-moss-soft); }
+.foot a { color: var(--on-moss); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .ledger__cells { grid-auto-flow: row; grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(odd) { border-left: 0; }
+  .stat:nth-child(n + 3) { border-top: 1px solid var(--line-soft); }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .steps li + li { border-left: 0; }
+  .steps li { border-bottom: 1px solid var(--line-soft); }
+  .steps li:nth-child(even) { border-left: 1px solid var(--line-soft); }
+  .skills { grid-template-columns: 1fr; }
+  .skill + .skill { border-left: 0; border-top: 1px solid var(--line-soft); }
+  .contact__deco { display: none; }
+}
+@media (max-width: 860px) {
+  .bar { grid-template-columns: 1fr auto; }
+  .bar__nav { display: none; }
+  .sec { grid-template-columns: 1fr; }
+  .sec__head { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__grid > * + * { border-left: 0; border-top: 1px solid var(--line-on-moss); }
+  .work { grid-template-columns: 1fr; }
+  .work__art { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .price, .about { grid-template-columns: 1fr; }
+  .price__rate { border-left: 0; border-top: 1px solid var(--line-soft); }
+  .about p + p { border-left: 0; border-top: 1px solid var(--line-soft); }
+  .timeline li { grid-template-columns: 1fr; }
+  .timeline__when { padding-bottom: 0; }
+  .timeline__what { padding: 4px var(--pad) 22px; }
+  .part--wide { display: none; }
+}
+@media (max-width: 560px) {
+  .steps { grid-template-columns: 1fr; }
+  .steps li:nth-child(even) { border-left: 0; }
+  .part--md { display: none; }
+  .hero__stage { height: 260px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .part__body, .t-dots i { animation: none; }
+  .part__push, .shop > *, .shop__row > * { transition: none; }
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main"><span data-l="ja">本文へ移動</span><span data-l="en">Skip to content</span></a>
 
-<header class="site-head">
-  <div class="wrap">
-    <a href="#top" class="brand">HIROTO&nbsp;TERAI<span class="dot">.</span></a>
-    <nav class="nav">
-      <a href="#work" class="nav-hide">Work</a>
-      <a href="#capabilities" class="nav-hide">Capabilities</a>
-      <a href="#experience" class="nav-hide">Experience</a>
-      <a href="#contact">Contact</a>
-      <button class="theme-btn" id="themeBtn" type="button" aria-label="テーマ切替">Theme</button>
-    </nav>
+<header class="bar">
+  <a class="bar__name" href="#top"><span data-l="ja">寺井 啓人</span><span data-l="en">Hiroto Terai</span></a>
+  <nav class="bar__nav" aria-label="ページ内">
+    <a href="#results"><span data-l="ja">数字</span><span data-l="en">Results</span></a>
+    <a href="#work"><span data-l="ja">実績</span><span data-l="en">Work</span></a>
+    <a href="#skills"><span data-l="ja">できること</span><span data-l="en">Skills</span></a>
+    <a href="#process"><span data-l="ja">進め方</span><span data-l="en">Process</span></a>
+    <a href="#career"><span data-l="ja">経歴</span><span data-l="en">Career</span></a>
+    <a href="#price"><span data-l="ja">料金</span><span data-l="en">Pricing</span></a>
+    <a href="#contact"><span data-l="ja">連絡</span><span data-l="en">Contact</span></a>
+  </nav>
+  <div class="bar__tools">
+    <button class="chip-btn" type="button" data-action="lang">
+      <span data-l="ja" aria-hidden="true">EN</span><span data-l="en" aria-hidden="true">JA</span>
+      <span class="sr-only" data-l="ja">Switch to English</span><span class="sr-only" data-l="en">日本語に切り替え</span>
+    </button>
+    <button class="chip-btn" type="button" data-action="theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+      <span class="sr-only" data-l="ja">明るさを切り替え</span><span class="sr-only" data-l="en">Toggle dark mode</span>
+    </button>
   </div>
 </header>
 
-<main id="top">
+<main id="main">
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="wrap">
-      <div class="kick reveal">
-        <span class="label">Shopify Frontend Engineer</span>
-        <span class="avail">平日3h / 休日3–5h ・ <b>即日稼働可</b></span>
+<section class="hero" id="top" aria-labelledby="hero-name">
+  <div class="hero__stage" aria-hidden="true">
+    <div class="part" style="--x:6%;--y:14%;--d:.05s"><div class="part__push"><div class="part__body" style="--r:-7deg">
+      <div class="toy toy--click t-add" data-toy="add">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11h10.3l2.2-8H7"/><circle cx="9" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg>
+        <span>+</span>
       </div>
-      <h1 class="reveal">Shopify<span class="l2">Frontend</span><span class="l2">Engineer<span class="dot" style="color:var(--accent)">.</span></span></h1>
-      <p class="jp-lead reveal">つくれて、<span class="mark">数字も回せる</span>。Shopifyでお店の売上を伸ばす人。</p>
-      <div class="meta">
-        <p class="desc reveal">見た目を整えるだけの開発では終わらせません。テーマ実装から GA4・広告の計測、改善提案まで一人で回し、「売れるストア」に近づけます。EC運営も Shopify 開発も、両方の現場を経験してきました。</p>
-        <div class="tags reveal">
-          <span class="tag">Shopify / Liquid</span>
-          <span class="tag">GA4・GTM</span>
-          <span class="tag">広告計測</span>
-          <span class="tag">CRM 実装</span>
-          <span class="tag">Core Web Vitals</span>
+    </div></div></div>
+    <div class="part" style="--x:24%;--y:8%;--d:.2s"><div class="part__push"><div class="part__body" style="--r:6deg">
+      <div class="toy t-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.3 11.2a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="t-cart__badge" data-cart-count>2</span>
+      </div>
+    </div></div></div>
+    <div class="part part--md" style="--x:38%;--y:22%;--d:.35s"><div class="part__push"><div class="part__body" style="--r:-4deg">
+      <div class="toy t-dots"><i></i><i></i><i></i></div>
+    </div></div></div>
+    <div class="part" style="--x:52%;--y:6%;--d:.12s"><div class="part__push"><div class="part__body" style="--r:9deg">
+      <div class="toy toy--click t-toggle" data-toy="toggle"><span class="t-toggle__knob"></span></div>
+    </div></div></div>
+    <div class="part part--wide" style="--x:64%;--y:24%;--d:.5s"><div class="part__push"><div class="part__body" style="--r:-3deg">
+      <div class="toy t-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.2-4.2"/></svg><i></i></div>
+    </div></div></div>
+    <div class="part" style="--x:80%;--y:10%;--d:.28s"><div class="part__push"><div class="part__body" style="--r:-10deg">
+      <div class="toy toy--click t-heart" data-toy="heart"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path fill="none" d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/></svg></div>
+    </div></div></div>
+    <div class="part" style="--x:90%;--y:36%;--d:.62s"><div class="part__push"><div class="part__body" style="--r:12deg">
+      <div class="toy toy--click t-check" data-toy="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5.5 12.5 4.2 4.2 8.8-9.4"/></svg></div>
+    </div></div></div>
+    <div class="part part--md" style="--x:14%;--y:44%;--d:.44s"><div class="part__push"><div class="part__body" style="--r:4deg">
+      <div class="toy t-step"><span class="t-step__btn" data-step="-1">−</span><span class="t-step__num" data-step-num>1</span><span class="t-step__btn" data-step="1">+</span></div>
+    </div></div></div>
+    <div class="part" style="--x:33%;--y:46%;--d:.7s"><div class="part__push"><div class="part__body" style="--r:-12deg">
+      <div class="toy t-tag">¥</div>
+    </div></div></div>
+    <div class="part part--md" style="--x:72%;--y:44%;--d:.36s"><div class="part__push"><div class="part__body" style="--r:6deg">
+      <div class="toy t-swatch" data-toy="swatch"><i class="on" style="background:var(--tomato)"></i><i style="background:var(--sky)"></i><i style="background:var(--sun)"></i></div>
+    </div></div></div>
+    <div class="part part--wide" style="--x:47%;--y:40%;--d:.58s"><div class="part__push"><div class="part__body" style="--r:0deg">
+      <div class="shape"><svg width="86" height="30" viewBox="0 0 86 30" fill="none"><path d="M4 18c7-12 13-12 19 0s12 12 19 0 13-12 19 0 13 12 21 0" stroke="#EA5B3F" stroke-width="6" stroke-linecap="round"/></svg></div>
+    </div></div></div>
+    <div class="part part--wide" style="--x:2%;--y:66%;--d:.8s"><div class="part__push"><div class="part__body" style="--r:18deg">
+      <div class="shape"><svg width="44" height="44" viewBox="0 0 44 44"><path d="M22 3 27.6 15.6 41 17.2 31 26.4 33.8 40 22 33.2 10.2 40 13 26.4 3 17.2 16.4 15.6Z" fill="#F6C445" stroke="#1C2418" stroke-width="2.5" stroke-linejoin="round"/></svg></div>
+    </div></div></div>
+    <div class="part" style="--x:62%;--y:62%;--d:.9s"><div class="part__push"><div class="part__body" style="--r:-20deg">
+      <div class="shape"><svg width="42" height="42" viewBox="0 0 42 42"><circle cx="21" cy="21" r="16" fill="none" stroke="#4F7FE3" stroke-width="7"/></svg></div>
+    </div></div></div>
+  </div>
+
+  <h1 class="hero__name" id="hero-name"><span aria-hidden="true">HIROTO TERAI</span><span class="sr-only">寺井 啓人（Hiroto Terai）</span></h1>
+
+  <div class="hero__grid">
+    <div>
+      <p class="hero__role"><span data-l="ja">寺井 啓人　Shopifyフロントエンドエンジニア</span><span data-l="en">Shopify front-end engineer, Tokyo</span></p>
+      <p class="hero__lead">
+        <span data-l="ja">ECの売り場を知っているエンジニアが、Shopifyのフロントを組みます。</span>
+        <span data-l="en">An engineer who has run an online store, now building Shopify storefronts.</span>
+      </p>
+      <p class="hero__sub">
+        <span data-l="ja">事業会社でECの仕事をひと通り経験してから、開発の道に進みました。デザインどおりに組み、動きは自分の手で確かめ、公開後の数字まで見ます。</span>
+        <span data-l="en">I worked through every part of e-commerce at a brand before moving into development. I build from your designs, test every interaction by hand, and keep an eye on the numbers after launch.</span>
+      </p>
+    </div>
+    <div>
+      <dl class="terms">
+        <dt><span data-l="ja">稼働</span><span data-l="en">Hours</span></dt>
+        <dd><span data-l="ja">平日朝夜と土日祝、週10〜15時間</span><span data-l="en">Weekday mornings and evenings, plus weekends. 10–15 h a week</span></dd>
+        <dt><span data-l="ja">場所</span><span data-l="en">Where</span></dt>
+        <dd><span data-l="ja">フルリモート</span><span data-l="en">Fully remote</span></dd>
+        <dt><span data-l="ja">開始</span><span data-l="en">Start</span></dt>
+        <dd><span data-l="ja">すぐに始められます</span><span data-l="en">Available now</span></dd>
+      </dl>
+      <a class="btn" href="#contact">
+        <span data-l="ja">面談を相談する</span><span data-l="en">Book a call</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="results" aria-labelledby="results-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="results-title"><span data-l="ja">数字で見る</span><span data-l="en">In numbers</span></h2>
+    <p class="sec__note"><span data-l="ja">売る側にいた頃の成果と、作る側でのいまの工夫です。</span><span data-l="en">Results from my time on the selling side, and from how I build now.</span></p>
+  </div>
+  <div class="sec__body">
+    <div class="ledger">
+      <p class="ledger__side"><span data-l="ja">売る側で</span><span data-l="en">Selling</span><small><span data-l="ja">KEBOZ（アパレル）2023〜2025</span><span data-l="en">KEBOZ, apparel, 2023–2025</span></small></p>
+      <div class="ledger__cells">
+        <div class="stat">
+          <p class="stat__num"><span data-l="ja">+500<small>万円／月</small></span><span data-l="en">+¥5M<small>/ mo</small></span></p>
+          <p class="stat__what"><span data-l="ja">店舗とECの在庫連携で、欠品による売り逃しを減らし、月間売上を平均で伸ばした</span><span data-l="en">Average monthly sales lift from syncing store and online inventory, so items stopped selling out online</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat__num">1.0→1.7<small>%</small></p>
+          <p class="stat__what"><span data-l="ja">10万人超の会員へのセグメント配信と、Shopify Flowの自動配信で購入率を改善</span><span data-l="en">Conversion rate after segmenting 100k+ members and automating emails with Shopify Flow</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat__num"><span data-l="ja">1,000<small>名超／2日</small></span><span data-l="en">1,000+<small>in 2 days</small></span></p>
+          <p class="stat__what"><span data-l="ja">会員限定セールの導線を設計し、ひと月分の新規会員を2日で獲得</span><span data-l="en">New members from a members-only sale flow, a usual month's sign-ups in two days</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat__num">−20<small><span data-l="ja">時間／月</span><span data-l="en">h / mo</span></small></p>
+          <p class="stat__what"><span data-l="ja">FAQと自動応答を整え、問い合わせ対応の時間を削減</span><span data-l="en">Less time on customer support after building an FAQ and auto-replies</span></p>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- WORK -->
-  <section class="sec" id="work">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="num">01</span>
-        <h2>Selected Work</h2>
-        <span class="jp-sub">できることの実例</span>
-        <span class="idx">04 PROJECTS</span>
-      </div>
-      <div class="work-list">
-
-        <a class="work-item reveal" href="https://wastenot-official.com/" target="_blank" rel="noopener">
-          <span class="num">01</span>
-          <div class="work-main">
-            <div class="work-title">WASTE NOT by BRING</div>
-            <p class="work-sub">現職で開発・運用を担当しているECストア。オリジナルセクションの実装、計測設計、継続的な改善までを日々手を動かして回しています。</p>
-            <div class="work-chips"><span class="chip">Shopify</span><span class="chip">Liquid / OS 2.0</span><span class="chip">運用中</span></div>
-            <span class="work-link">サイトを見る <span class="arw">↗</span></span>
-          </div>
-          <div class="work-side"><span class="role">本業 / 開発・運用</span><span class="yr">2025—</span></div>
-        </a>
-
-        <a class="work-item reveal" href="https://keboz.jp" target="_blank" rel="noopener">
-          <span class="num">02</span>
-          <div class="work-main">
-            <div class="work-title">KEBOZ 公式ECストア</div>
-            <p class="work-sub">アパレルブランドのECサイト改修・CS・広告運用・GA4分析・改善提案までを一貫して担当。実店舗と連携したOMO、LINE／メール／アプリのCRM施策も。</p>
-            <div class="work-chips"><span class="chip">EC運営</span><span class="chip">CRM</span><span class="chip">広告 / GA4</span></div>
-            <span class="work-link">サイトを見る <span class="arw">↗</span></span>
-          </div>
-          <div class="work-side"><span class="role">EC運営 / CRM</span><span class="yr">前職</span></div>
-        </a>
-
-        <a class="work-item reveal" href="https://mystudio-fashion-ec.myshopify.com/" target="_blank" rel="noopener">
-          <span class="num">03</span>
-          <div class="work-main">
-            <div class="work-title">Apparel Store</div>
-            <p class="work-sub">個人制作のアパレルECデモ。テーマ構築・オリジナルセクション・レスポンシブ最適化を、実際に触れる形でまとめたショーケースです。</p>
-            <div class="work-chips"><span class="chip">架空 / デモ</span><span class="chip">テーマ構築</span><span class="chip">レスポンシブ</span></div>
-            <span class="work-link">デモを見る <span class="arw">↗</span></span>
-            <div class="work-demo">ストアパスワード <b>mystudio2026</b></div>
-          </div>
-          <div class="work-side"><span class="role">制作 / デモ</span><span class="yr">2026</span></div>
-        </a>
-
-        <a class="work-item reveal" href="https://mystudio-fashion-ec.myshopify.com/collections/skincare" target="_blank" rel="noopener">
-          <span class="num">04</span>
-          <div class="work-main">
-            <div class="work-title">Skincare Store</div>
-            <p class="work-sub">スキンケアD2Cを想定したデモ。世界観に合わせたセクション設計と、比較表・成分・FAQなど「売れる導線」の作り込みを試作しています。</p>
-            <div class="work-chips"><span class="chip">架空 / デモ</span><span class="chip">セクション設計</span><span class="chip">導線設計</span></div>
-            <span class="work-link">デモを見る <span class="arw">↗</span></span>
-            <div class="work-demo">ストアパスワード <b>mystudio2026</b></div>
-          </div>
-          <div class="work-side"><span class="role">制作 / デモ</span><span class="yr">2026</span></div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CAPABILITIES -->
-  <section class="sec" id="capabilities">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="num">02</span>
-        <h2>Capabilities</h2>
-        <span class="jp-sub">できること</span>
-        <span class="idx">BUILD × GROW</span>
-      </div>
-      <div class="cap-grid">
-        <div class="cap-col reveal">
-          <div class="cn"><span class="en">Build</span><span class="ja">つくる</span></div>
-          <p class="lede">Liquid / HTML / CSS / JavaScript で、軽く・柔軟に。</p>
-          <ul>
-            <li><span class="b">01</span><span>既存テーマ（Dawn等 OS 2.0）の改修・カスタマイズ</span></li>
-            <li><span class="b">02</span><span>オリジナルセクション・比較表・FAQ等の新規開発</span></li>
-            <li><span class="b">03</span><span>モバイル最適化・表示速度 / Core Web Vitals の改善</span></li>
-            <li><span class="b">04</span><span>ポイント／会員ランク／クーポン交換などCRM機能の実装</span></li>
-            <li><span class="b">05</span><span>JSエラー・表示崩れなど不具合の切り分けと修正</span></li>
-          </ul>
+    <div class="ledger">
+      <p class="ledger__side"><span data-l="ja">作る側で</span><span data-l="en">Building</span><small><span data-l="ja">2025年〜いま</span><span data-l="en">2025 to now</span></small></p>
+      <div class="ledger__cells">
+        <div class="stat">
+          <p class="stat__num">6<small><span data-l="ja">サイト</span><span data-l="en">stores</span></small></p>
+          <p class="stat__what"><span data-l="ja">副業で支援したShopifyストア。新規立ち上げ2、改修2、計測2</span><span data-l="en">Shopify stores I've worked on as a freelancer: 2 launches, 2 rebuilds, 2 tracking setups</span></p>
         </div>
-        <div class="cap-col reveal">
-          <div class="cn"><span class="en">Grow</span><span class="ja">伸ばす</span></div>
-          <p class="lede">つくった先の「売上」まで見て、改善を回す。</p>
-          <ul>
-            <li><span class="b">01</span><span>GA4 / GTM / Custom Pixels の計測設計</span></li>
-            <li><span class="b">02</span><span>Meta / Google / Yahoo 広告のCV計測整備</span></li>
-            <li><span class="b">03</span><span>実機診断からの改善提案（優先度つき）</span></li>
-            <li><span class="b">04</span><span>アプリの選定・検証・導入（ノーコード機能追加）</span></li>
-            <li><span class="b">05</span><span>LINE / メール / アプリを使ったCRM施策</span></li>
-          </ul>
+        <div class="stat">
+          <p class="stat__num">50<small>%+</small></p>
+          <p class="stat__what"><span data-l="ja">Figma × Claude Codeの組み合わせで、実装の工数を削減</span><span data-l="en">Less build time by pairing Figma with Claude Code</span></p>
         </div>
-      </div>
-      <p class="cap-note reveal">開発とグロース、<em>どちらか片方でなく両方を一人で</em>。ここが強みです。</p>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="sec" id="experience">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="num">03</span>
-        <h2>Experience</h2>
-        <span class="jp-sub">これまで</span>
-        <span class="idx">2020 — NOW</span>
-      </div>
-
-      <div class="exp-item reveal">
-        <div class="exp-when"><span class="now">● NOW</span><br>株式会社 STAYGOLD</div>
-        <div>
-          <div class="exp-org">Shopify開発・EC改善</div>
-          <div class="exp-role">Frontend / Shopify Engineer</div>
-          <p class="exp-body">UI/UX改修依頼への対応、オリジナルセクションの新規開発、アプリの選定・導入などストアの機能追加全般を担当。開発者目線での改善提案を自ら実装まで落とし込み、表示速度の改善、GTM/GA4の計測設計も。ネイティブアプリ連携、ポイント／会員ランク制度、ポイント⇄クーポン交換などのCRM実装、外部ベンダーの折衝・進行管理まで。</p>
-        </div>
-      </div>
-
-      <div class="exp-item reveal">
-        <div class="exp-when">前職<br>アパレルブランド KEBOZ</div>
-        <div>
-          <div class="exp-org">EC運営・CRM</div>
-          <div class="exp-role">E-Commerce / CRM</div>
-          <p class="exp-body">ECサイトの改修・カスタマーサポートに加え、Web広告の運用、GA4でのアクセス解析と改善提案までを一貫して担当。実店舗と連携したOMO施策、LINE／メール／ネイティブアプリを活用したCRM施策の企画・実行にも携わりました。</p>
-        </div>
-      </div>
-
-      <div class="exp-item reveal">
-        <div class="exp-when">Earlier</div>
-        <div>
-          <div class="exp-org">Web制作・サイト改善</div>
-          <div class="exp-role">Web Production</div>
-          <p class="exp-body">会社のメインWebサイトのリニューアル、ユーザビリティテストを通じたサイト改善に従事。</p>
+        <div class="stat">
+          <p class="stat__num">−$20<small><span data-l="ja">／月</span><span data-l="en">/ mo</span></small></p>
+          <p class="stat__what"><span data-l="ja">配送日時指定の有料アプリを、自作の実装に置き換え</span><span data-l="en">Replaced a paid delivery-date app with my own build</span></p>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SKILLS -->
-  <section class="sec" id="skills">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="num">04</span>
-        <h2>Skills</h2>
-        <span class="jp-sub">スキル</span>
-        <span class="idx">STACK</span>
+<section class="sec" id="work" aria-labelledby="work-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="work-title"><span data-l="ja">実績</span><span data-l="en">Work</span></h2>
+    <p class="sec__note"><span data-l="ja">Shopifyのストアを4つ。お店の図は、各ストアのつくりをもとに描いたものです。</span><span data-l="en">Four Shopify stores. The little storefronts are drawings, not screenshots.</span></p>
+  </div>
+  <div class="sec__body">
+    <article class="work" style="--accent:var(--sky)">
+      <div class="work__art" aria-hidden="true">
+        <div class="shop" style="--accent:var(--sky);--hero:#E3ECFF">
+          <div class="shop__bar"><b></b><i></i><i></i><i></i></div>
+          <div class="shop__hero"><em></em></div>
+          <div class="shop__row"><span></span><span></span><span></span></div>
+        </div>
       </div>
-      <div class="skill-grid reveal">
-        <span class="skill">Shopify / Liquid</span>
-        <span class="skill">HTML / CSS</span>
-        <span class="skill">JavaScript</span>
-        <span class="skill">OS 2.0 セクション設計</span>
-        <span class="skill">メタフィールド / メタオブジェクト</span>
-        <span class="skill">GA4</span>
-        <span class="skill">GTM</span>
-        <span class="skill">Custom Pixels</span>
-        <span class="skill">Meta / Google / Yahoo 広告計測</span>
-        <span class="skill">Core Web Vitals</span>
-        <span class="skill">アプリ選定・導入</span>
-        <span class="skill">CRM（ポイント / ランク / クーポン）</span>
+      <div class="work__text">
+        <ul class="work__tags">
+          <li class="is-main"><span data-l="ja">本業</span><span data-l="en">Day job</span></li>
+          <li>Shopify Online Store 2.0</li>
+          <li><span data-l="ja">2025年8月〜</span><span data-l="en">Aug 2025 –</span></li>
+        </ul>
+        <h3 class="work__title">WASTE NOT by BRING</h3>
+        <p class="work__summary"><span data-l="ja">株式会社STAYGOLDの自社ECストア。デザイナーや運営チームからの依頼を受けて、ヒアリングから実装・リリースまでを担当しています。</span><span data-l="en">The in-house store of STAYGOLD, where I'm a Shopify engineer. I take requests from designers and the store team and carry them from first conversation to release.</span></p>
+        <ul class="work__list">
+          <li><span data-l="ja">管理画面で編集できるオリジナルセクションの開発</span><span data-l="en">Custom sections the team can edit in the theme editor</span></li>
+          <li><span data-l="ja">表示速度とCore Web Vitals（LCP・CLS）の改善</span><span data-l="en">Page speed and Core Web Vitals work (LCP, CLS)</span></li>
+          <li><span data-l="ja">GTM・GA4での計測設計</span><span data-l="en">Tracking design with GTM and GA4</span></li>
+          <li><span data-l="ja">ポイント・会員ランク・クーポン交換の実装、アプリ連携</span><span data-l="en">Points, member tiers and coupon exchange, with native app integration</span></li>
+        </ul>
+        <div class="work__actions">
+          <a class="link-out" href="https://wastenot-official.com/" target="_blank" rel="noopener"><span data-l="ja">サイトを見る</span><span data-l="en">Visit the store</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="work" style="--accent:var(--tomato)">
+      <div class="work__art" aria-hidden="true">
+        <div class="shop" style="--accent:var(--tomato);--hero:#FFE4DC">
+          <div class="shop__bar"><b></b><i></i><i></i><i></i></div>
+          <div class="shop__hero"><em></em></div>
+          <div class="shop__row"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="work__text">
+        <ul class="work__tags">
+          <li class="is-main"><span data-l="ja">前職</span><span data-l="en">Previous role</span></li>
+          <li><span data-l="ja">EC統括</span><span data-l="en">Head of e-commerce</span></li>
+          <li><span data-l="ja">2023年6月〜2025年7月</span><span data-l="en">Jun 2023 – Jul 2025</span></li>
+        </ul>
+        <h3 class="work__title">KEBOZ</h3>
+        <p class="work__summary"><span data-l="ja">アパレルブランドの公式EC。商品登録から分析、販促、CRM、問い合わせ対応、Shopifyの開発まで、ECに関わる仕事をすべて担当しました。</span><span data-l="en">An apparel brand's official store. I covered everything from product listings, analytics and promotions to CRM, customer support and Shopify development.</span></p>
+        <ul class="work__list">
+          <li><span data-l="ja">Liquidでのページ制作とオリジナルセクションの開発</span><span data-l="en">Pages and custom sections in Liquid</span></li>
+          <li><span data-l="ja">店舗とECの在庫連携、Shopify Flowでの自動配信</span><span data-l="en">Store-to-online inventory sync and automated emails with Shopify Flow</span></li>
+          <li><span data-l="ja">広告の計測設計とGA4での分析・改善提案</span><span data-l="en">Ad conversion tracking design, plus GA4 analysis and improvement ideas</span></li>
+          <li><span data-l="ja">アプリの選定からテストまで</span><span data-l="en">Choosing, testing and rolling out apps</span></li>
+        </ul>
+        <div class="work__actions">
+          <a class="link-out" href="https://keboz.jp" target="_blank" rel="noopener"><span data-l="ja">サイトを見る</span><span data-l="en">Visit the store</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="work" style="--accent:var(--sun)">
+      <div class="work__art" aria-hidden="true">
+        <div class="shop" style="--accent:var(--sun);--hero:#FFF4D2">
+          <div class="shop__bar"><b></b><i></i><i></i><i></i></div>
+          <div class="shop__hero"><em></em></div>
+          <div class="shop__row"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="work__text">
+        <ul class="work__tags">
+          <li class="is-main"><span data-l="ja">架空のデモ</span><span data-l="en">Demo store</span></li>
+          <li><span data-l="ja">テーマ構築</span><span data-l="en">Theme build</span></li>
+          <li>2026</li>
+        </ul>
+        <h3 class="work__title">Apparel Store</h3>
+        <p class="work__summary"><span data-l="ja">アパレルのD2Cを想定して作った、触って確かめられるデモストアです。テーマの構築、オリジナルセクション、スマートフォンでの見え方の調整をまとめています。</span><span data-l="en">A demo store for an imagined apparel brand that you can click through. It shows a theme build, custom sections and mobile tuning.</span></p>
+        <div class="work__actions">
+          <a class="link-out" href="https://mystudio-fashion-ec.myshopify.com/" target="_blank" rel="noopener"><span data-l="ja">デモを見る</span><span data-l="en">Open the demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <span class="pass"><span data-l="ja">パスワード</span><span data-l="en">Password</span> <code>mystudio2026</code>
+            <button class="copy-btn" type="button" data-copy="mystudio2026"><span class="idle"><span data-l="ja">コピー</span><span data-l="en">Copy</span></span><span class="done"><span data-l="ja">コピーしました</span><span data-l="en">Copied</span></span></button>
+          </span>
+        </div>
+      </div>
+    </article>
+
+    <article class="work" style="--accent:var(--peach)">
+      <div class="work__art" aria-hidden="true">
+        <div class="shop" style="--accent:var(--peach);--hero:#FFEAF0">
+          <div class="shop__bar"><b></b><i></i><i></i><i></i></div>
+          <div class="shop__hero"><em></em></div>
+          <div class="shop__row"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="work__text">
+        <ul class="work__tags">
+          <li class="is-main"><span data-l="ja">架空のデモ</span><span data-l="en">Demo store</span></li>
+          <li><span data-l="ja">セクション設計</span><span data-l="en">Section design</span></li>
+          <li>2026</li>
+        </ul>
+        <h3 class="work__title">Skincare Store</h3>
+        <p class="work__summary"><span data-l="ja">スキンケアのD2Cを想定したデモストアです。世界観に合わせたセクションと、比較表・成分・FAQなど、買う前の迷いを減らす導線を作り込んでいます。</span><span data-l="en">A demo store for an imagined skincare brand. Sections match the brand's mood, and comparison tables, ingredients and FAQs help shoppers decide.</span></p>
+        <div class="work__actions">
+          <a class="link-out" href="https://xn-0nsp96djkas7be59f.myshopify.com/" target="_blank" rel="noopener"><span data-l="ja">デモを見る</span><span data-l="en">Open the demo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+          <span class="pass"><span data-l="ja">パスワード</span><span data-l="en">Password</span> <code>mystudio2026</code>
+            <button class="copy-btn" type="button" data-copy="mystudio2026"><span class="idle"><span data-l="ja">コピー</span><span data-l="en">Copy</span></span><span class="done"><span data-l="ja">コピーしました</span><span data-l="en">Copied</span></span></button>
+          </span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="skills" aria-labelledby="skills-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="skills-title"><span data-l="ja">できること</span><span data-l="en">What I do</span></h2>
+    <p class="sec__note"><span data-l="ja">デザインはいただく前提で、実装から公開後の計測までを受け持ちます。</span><span data-l="en">You bring the design. I handle the build, the launch and the tracking after it.</span></p>
+  </div>
+  <div class="sec__body">
+    <div class="skills">
+      <div class="skill" style="--dot:var(--sun)">
+        <h3 class="skill__name"><span data-l="ja">組む</span><span data-l="en">Build</span></h3>
+        <p class="skill__lead"><span data-l="ja">HTML／CSS／JavaScript／Liquid</span><span data-l="en">HTML, CSS, JavaScript and Liquid</span></p>
+        <ul>
+          <li><span data-l="ja">Figmaのデザインからのコーディング（PC・スマートフォン）</span><span data-l="en">Coding from Figma, for desktop and mobile</span></li>
+          <li><span data-l="ja">タブ、カルーセル、モーダル、カウントダウンなどのUI部品</span><span data-l="en">UI parts such as tabs, carousels, modals and countdowns</span></li>
+          <li><span data-l="ja">Online Store 2.0のテーマ改修と、管理画面で編集できるセクション</span><span data-l="en">Online Store 2.0 theme work and editor-friendly sections</span></li>
+          <li><span data-l="ja">表示崩れやスマートフォン特有の不具合の修正</span><span data-l="en">Fixing layout breaks and mobile-only bugs</span></li>
+          <li><span data-l="ja">メタフィールド・メタオブジェクトのデータ設計</span><span data-l="en">Data design with metafields and metaobjects</span></li>
+          <li><span data-l="ja">新規ストアの立ち上げ（アカウント作成から公開まで）</span><span data-l="en">New store setup, from account creation to launch</span></li>
+        </ul>
+      </div>
+      <div class="skill" style="--dot:var(--tomato)">
+        <h3 class="skill__name"><span data-l="ja">測って伸ばす</span><span data-l="en">Measure and grow</span></h3>
+        <p class="skill__lead"><span data-l="ja">作ったものが売上につながっているかを見ます</span><span data-l="en">Checking that what we built actually sells</span></p>
+        <ul>
+          <li><span data-l="ja">GTM・GA4・Custom Pixelsの計測設計</span><span data-l="en">Tracking with GTM, GA4 and Custom Pixels</span></li>
+          <li><span data-l="ja">Meta・Google・Yahoo!広告のコンバージョン計測の設計</span><span data-l="en">Conversion tracking design for Meta, Google and Yahoo! ads</span></li>
+          <li><span data-l="ja">表示速度とCore Web Vitalsの改善</span><span data-l="en">Page speed and Core Web Vitals</span></li>
+          <li><span data-l="ja">会員ランク・ポイント・クーポン交換の実装</span><span data-l="en">Member tiers, points and coupon exchange</span></li>
+          <li><span data-l="ja">Shopify Flowでの自動化、アプリの選定と置き換え</span><span data-l="en">Automation with Shopify Flow, choosing and replacing apps</span></li>
+        </ul>
+      </div>
+      <div class="skill" style="--dot:var(--sky)">
+        <h3 class="skill__name"><span data-l="ja">AIで速く</span><span data-l="en">Faster with AI</span></h3>
+        <p class="skill__lead"><span data-l="ja">Claude Codeを毎日の開発で使っています</span><span data-l="en">I use Claude Code every working day</span></p>
+        <ul>
+          <li><span data-l="ja">仕様書づくり、実装、Playwrightでの動作確認を役割で分けて回す開発の仕組み</span><span data-l="en">A workflow that splits specs, building and Playwright testing into separate roles</span></li>
+          <li><span data-l="ja">Shopifyの案件ごとに、ルール・スキル・サブエージェントをそろえる標準セットアップ</span><span data-l="en">A standard setup of rules, skills and sub-agents for each Shopify project</span></li>
+          <li><span data-l="ja">デザイナーとの確認と修正を速くする、デザインレビューツールの自作</span><span data-l="en">A home-made design review tool that speeds up rounds with designers</span></li>
+          <li><span data-l="ja">ただし最後の確認は、必ず自分の手でやり切ります</span><span data-l="en">The final check is always done by hand</span></li>
+        </ul>
       </div>
     </div>
-  </section>
+    <ul class="stack" aria-label="使える技術">
+      <li>Shopify</li><li>Liquid</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Figma</li><li>GTM</li><li>GA4</li><li>Custom Pixels</li><li>Shopify Flow</li><li>Git</li><li>Claude Code</li><li>Playwright</li><li>AWS</li>
+    </ul>
+  </div>
+</section>
 
-  <!-- ABOUT -->
-  <section class="sec" id="about">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="num">05</span>
-        <h2>About</h2>
-        <span class="jp-sub">人となり</span>
-      </div>
-      <p class="about-body reveal">「作って終わり」にしたくない。実装したものが本当に<em>売上につながっているか</em>、数字を見て次の一手を考える。</p>
-      <p class="about-note reveal">だから開発とグロースの両方に片足を置いてきました。オフの趣味は音楽鑑賞と料理。手を動かして少しずつ良くしていく感覚は、料理もストア改善も同じかもしれません。</p>
-    </div>
-  </section>
+<section class="sec" id="process" aria-labelledby="process-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="process-title"><span data-l="ja">進め方</span><span data-l="en">How I work</span></h2>
+    <p class="sec__note"><span data-l="ja">AIで速く作り、確認は手で。</span><span data-l="en">Fast with AI, checked by hand.</span></p>
+  </div>
+  <div class="sec__body">
+    <ol class="steps">
+      <li>
+        <h3><span data-l="ja">目的を聞く</span><span data-l="en">Ask what it's for</span></h3>
+        <p><span data-l="ja">誰に、何をしてほしいページなのかを最初に確かめます。</span><span data-l="en">Who is the page for, and what should they do there?</span></p>
+      </li>
+      <li>
+        <h3><span data-l="ja">意図を考える</span><span data-l="en">Think through the intent</span></h3>
+        <p><span data-l="ja">デザインの意図をくみ取り、迷う点は先に質問します。</span><span data-l="en">I read the design's intent and ask about anything unclear up front.</span></p>
+      </li>
+      <li>
+        <h3><span data-l="ja">AIで形にする</span><span data-l="en">Shape it with AI</span></h3>
+        <p><span data-l="ja">Claude Codeで実装の土台を素早く作ります。</span><span data-l="en">Claude Code gets the groundwork in place quickly.</span></p>
+      </li>
+      <li class="is-key">
+        <h3><span data-l="ja">手で確かめる</span><span data-l="en">Test it by hand</span></h3>
+        <p><span data-l="ja">実機と各ブラウザで、表示と動きを細かく確認します。</span><span data-l="en">Real phones and every browser, checked in detail.</span></p>
+      </li>
+      <li>
+        <h3><span data-l="ja">安全に公開する</span><span data-l="en">Launch safely</span></h3>
+        <p><span data-l="ja">複製したテーマで確認してもらってから、公開します。</span><span data-l="en">You review it on a duplicate theme before it goes live.</span></p>
+      </li>
+    </ol>
+    <p class="promise"><span data-l="ja">AIが出したものを、そのまま納品することはしません。目的を持って作り、動作に問題がないことを確かめてからお渡しします。</span><span data-l="en">I never hand over raw AI output. Everything is built with a purpose and checked to work before you get it.</span></p>
+  </div>
+</section>
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="wrap">
-      <div class="sec-head reveal" style="border-bottom:0;margin-bottom:0;padding-bottom:0">
-        <span class="num">06</span><span class="idx" style="margin-left:0">CONTACT</span>
-      </div>
-      <h2 class="reveal">一緒に、売れるお店をつくりませんか。</h2>
-      <p class="jp-line reveal">Shopifyストアの改修・機能追加・改善のご相談を承っています。小さな修正から継続的な改善まで、お気軽にどうぞ。</p>
-      <div class="contact-links reveal">
-        <a href="mailto:hiro08051610@gmail.com"><span class="k">Email</span> hiro08051610@gmail.com <span class="arw">↗</span></a>
-        <a href="https://github.com/Hiroto-Terai" target="_blank" rel="noopener"><span class="k">GitHub</span> Hiroto-Terai <span class="arw">↗</span></a>
+<section class="sec" id="career" aria-labelledby="career-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="career-title"><span data-l="ja">経歴</span><span data-l="en">Career</span></h2>
+    <p class="sec__note"><span data-l="ja">エンジニア歴は2020年から。</span><span data-l="en">Engineering since 2020.</span></p>
+  </div>
+  <div class="sec__body">
+    <p class="story"><span data-l="ja">事業会社を2社経験し、ECに関わる仕事をひと通りやったうえで、いちばん好きだった開発の道を選びました。</span><span data-l="en">After two in-house roles where I did every kind of e-commerce work, I chose the part I liked most: development.</span></p>
+    <ol class="timeline">
+      <li>
+        <span class="timeline__when">2025 —</span>
+        <div class="timeline__what">
+          <h3><span data-l="ja">株式会社STAYGOLD</span><span data-l="en">STAYGOLD Co., Ltd.</span><small><span data-l="ja">Shopifyエンジニア／ディレクター</span><span data-l="en">Shopify engineer and director</span></small></h3>
+          <p><span data-l="ja">買取・販売の会社で、自社EC「WASTE NOT by BRING」の開発を担当。改善の提案から実装、外部ベンダーの進行管理まで。</span><span data-l="en">Building the company's own store, WASTE NOT by BRING, from proposals to code, and managing outside vendors.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="timeline__when">2025 —</span>
+        <div class="timeline__what">
+          <h3><span data-l="ja">フリーランス（副業）</span><span data-l="en">Freelance, alongside my job</span></h3>
+          <p><span data-l="ja">Shopifyストアの新規立ち上げ、改修、広告の計測実装を6サイトで担当。</span><span data-l="en">New store launches, rebuilds and ad tracking for six Shopify stores.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="timeline__when">2023 — 2025</span>
+        <div class="timeline__what">
+          <h3><span data-l="ja">株式会社KEBOZ</span><span data-l="en">KEBOZ Inc.</span><small><span data-l="ja">EC統括</span><span data-l="en">Head of e-commerce</span></small></h3>
+          <p><span data-l="ja">アパレルブランドのECを、構築・運用・販促・CRM・CSまで一人で受け持ち、最後はEC責任者に。</span><span data-l="en">Ran the apparel brand's store end to end, from build and operations to promotions, CRM and support, and led the team.</span></p>
+        </div>
+      </li>
+      <li>
+        <span class="timeline__when">2020 — 2022</span>
+        <div class="timeline__what">
+          <h3><span data-l="ja">株式会社NTTPCコミュニケーションズ</span><span data-l="en">NTTPC Communications</span><small><span data-l="ja">システム開発</span><span data-l="en">Software engineer</span></small></h3>
+          <p><span data-l="ja">フルリモートの少人数チームで、注文システムをフロントエンドからバックエンド、AWSまで開発。のちにチームリーダー。</span><span data-l="en">Built an ordering system across front end, back end and AWS in a small remote team, later as team lead.</span></p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="price" aria-labelledby="price-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="price-title"><span data-l="ja">料金の目安</span><span data-l="en">Pricing</span></h2>
+    <p class="sec__note"><span data-l="ja">小さな修正1つからお受けします。</span><span data-l="en">Small single fixes are welcome.</span></p>
+  </div>
+  <div class="sec__body">
+    <div class="price">
+      <ul class="price__list">
+        <li><span data-l="ja">表示崩れ・不具合の修正</span><span data-l="en">Fixing a layout break or bug</span><strong><span data-l="ja">20,000円〜</span><span data-l="en">from ¥20,000</span></strong></li>
+        <li><span data-l="ja">有料アプリの機能を実装で置き換え</span><span data-l="en">Replacing a paid app with code</span><strong><span data-l="ja">20,000円〜</span><span data-l="en">from ¥20,000</span></strong></li>
+        <li><span data-l="ja">ページ部品・オリジナルセクション</span><span data-l="en">A UI part or custom section</span><strong><span data-l="ja">30,000円〜</span><span data-l="en">from ¥30,000</span></strong></li>
+        <li><span data-l="ja">計測タグ（GA4・GTM・広告）</span><span data-l="en">Tracking (GA4, GTM, ads)</span><strong><span data-l="ja">30,000円〜</span><span data-l="en">from ¥30,000</span></strong></li>
+        <li><span data-l="ja">新規ストアの立ち上げ</span><span data-l="en">A new store, set up to launch</span><strong><span data-l="ja">150,000円〜</span><span data-l="en">from ¥150,000</span></strong></li>
+      </ul>
+      <div class="price__rate">
+        <p><span data-l="ja">時間単位の場合</span><span data-l="en">Hourly</span></p>
+        <p class="price__big">3,000<span data-l="ja">円〜／時間</span><span data-l="en">JPY+ / h</span></p>
+        <p class="note"><span data-l="ja">金額は内容を伺ってからお見積りします。連絡はメールとチャットが中心で、夜と週末ならオンラインでもお話しできます。</span><span data-l="en">I'll quote once I know the scope. I work mostly over email and chat, and can talk online on evenings and weekends (Japan time).</span></p>
+        <p class="out"><span data-l="ja">お受けしていないこと：デザイン制作。WordPressは実務経験がありません。</span><span data-l="en">Not offered: visual design. No hands-on WordPress experience.</span></p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<section class="sec" id="about" aria-labelledby="about-title">
+  <div class="sec__head">
+    <h2 class="sec__title" id="about-title"><span data-l="ja">人となり</span><span data-l="en">About me</span></h2>
+  </div>
+  <div class="sec__body">
+    <div class="about">
+      <p><span data-l="ja">AIを使うのが大好きで、休みの日もAIと一緒にゲームを作っています。新しい道具は、まず自分で触って確かめる性分です。</span><span data-l="en">I love working with AI, and on days off I make games with it. With any new tool, I try it myself first.</span></p>
+      <p><span data-l="ja">東京・浅草の生まれで、今も浅草に住んでいます。趣味はアカペラと、クロスバイクでのカフェ巡り。</span><span data-l="en">Born in Asakusa, Tokyo, and still living there. I sing a cappella and ride my bike around town to find good cafés.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <h2 class="contact__title" id="contact-title"><span data-l="ja">面談のご相談は、<br>メールでどうぞ。</span><span data-l="en">Let's talk about your project.</span></h2>
+  <p><span data-l="ja">案件の内容と時期を添えていただければ、こちらから面談の日程をご提案します。小さなご依頼からでも大丈夫です。</span><span data-l="en">Tell me what you need and when, and I'll suggest a time for a call. Small jobs are welcome too.</span></p>
+  <div class="contact__row">
+    <a class="btn" data-mail href="mailto:hiro08051610@gmail.com?subject=%E9%9D%A2%E8%AB%87%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg>
+      <span data-l="ja">メールで相談する</span><span data-l="en">Email me</span>
+    </a>
+    <span>hiro08051610@gmail.com</span>
+    <button class="copy-btn" type="button" data-copy="hiro08051610@gmail.com"><span class="idle"><span data-l="ja">アドレスをコピー</span><span data-l="en">Copy address</span></span><span class="done"><span data-l="ja">コピーしました</span><span data-l="en">Copied</span></span></button>
+  </div>
+  <div class="contact__deco" aria-hidden="true">
+    <div class="toy t-add">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11h10.3l2.2-8H7"/><circle cx="9" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg>
+      <span>+</span>
+    </div>
+    <div class="toy t-dots"><i></i><i></i><i></i></div>
+  </div>
+</section>
 
 </main>
 
-<footer class="site-foot">
-  <div class="wrap">
-    <span class="c">© 2026 HIROTO TERAI</span>
-    <span class="avail">平日3h / 休日3–5h ・ <b>即日稼働可</b></span>
-  </div>
+<footer class="foot">
+  <span>© 2026 <span data-l="ja">寺井 啓人</span><span data-l="en">Hiroto Terai</span></span>
+  <a href="https://github.com/Hiroto-Terai" target="_blank" rel="noopener">GitHub</a>
 </footer>
 
 <script>
-// Theme toggle (auto by default; button cycles light/dark and persists)
-document.documentElement.classList.add('js');
-(function(){
-  var root=document.documentElement, btn=document.getElementById('themeBtn');
-  var saved=localStorage.getItem('theme');
-  if(saved){root.setAttribute('data-theme',saved);}
-  function meta(){var m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.body).backgroundColor;}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme');
-    var isDark = cur ? cur==='dark' : matchMedia('(prefers-color-scheme:dark)').matches;
-    var next=isDark?'light':'dark';
-    root.setAttribute('data-theme',next);localStorage.setItem('theme',next);meta();
-  });
-  meta();
-})();
+(function () {
+  var root = document.documentElement;
+  root.classList.add("js");
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Reveal on scroll
-(function(){
-  if(!('IntersectionObserver'in window)){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in')});return;}
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
-  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
-  document.querySelectorAll('.reveal').forEach(function(e){io.observe(e)});
+  var META = {
+    ja: {
+      title: "寺井 啓人 | Shopifyフロントエンドエンジニア",
+      description: "ECを売る側と作る側の両方を経験した、Shopifyのフロントエンドエンジニア。Figmaからの実装、UI部品、計測まで。平日朝夜と土日祝、週10〜15時間で業務委託をお受けしています。",
+      mailSubject: "面談のご相談"
+    },
+    en: {
+      title: "Hiroto Terai | Shopify front-end engineer",
+      description: "A Shopify front-end engineer who has worked on both the selling and the building side of e-commerce. Figma to code, UI parts and tracking.",
+      mailSubject: "Project inquiry"
+    }
+  };
+
+  function saveSetting(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  function applyLang(lang) {
+    root.dataset.lang = lang;
+    root.lang = lang;
+    document.title = META[lang].title;
+    document.querySelector('meta[name="description"]').setAttribute("content", META[lang].description);
+    document.querySelectorAll("[data-mail]").forEach(function (link) {
+      link.href = "mailto:hiro08051610@gmail.com?subject=" + encodeURIComponent(META[lang].mailSubject);
+    });
+  }
+
+  function currentTheme() {
+    if (root.dataset.theme) return root.dataset.theme;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+
+  applyLang(root.dataset.lang === "en" ? "en" : "ja");
+
+  document.querySelector('[data-action="lang"]').addEventListener("click", function () {
+    var next = root.dataset.lang === "en" ? "ja" : "en";
+    applyLang(next);
+    saveSetting("lang", next);
+  });
+
+  document.querySelector('[data-action="theme"]').addEventListener("click", function () {
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    saveSetting("theme", next);
+  });
+
+  document.querySelectorAll("[data-copy]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(button.dataset.copy).then(function () {
+        button.classList.add("is-done");
+        setTimeout(function () { button.classList.remove("is-done"); }, 1800);
+      });
+    });
+  });
+
+  // The hero pieces are tiny working parts of a storefront, so they answer clicks.
+  var cartBadge = document.querySelector("[data-cart-count]");
+  var cartCount = 2;
+  var stepNumber = 1;
+  var stepLabel = document.querySelector("[data-step-num]");
+  var MAX_QUANTITY = 9;
+
+  document.querySelector(".hero__stage").addEventListener("click", function (event) {
+    var toy = event.target.closest("[data-toy]");
+    var step = event.target.closest("[data-step]");
+    if (step) {
+      stepNumber = Math.min(MAX_QUANTITY, Math.max(1, stepNumber + Number(step.dataset.step)));
+      stepLabel.textContent = stepNumber;
+      return;
+    }
+    if (!toy) return;
+    var kind = toy.dataset.toy;
+    if (kind === "add") {
+      cartCount += 1;
+      cartBadge.textContent = cartCount;
+      cartBadge.classList.remove("bump");
+      void cartBadge.offsetWidth;
+      cartBadge.classList.add("bump");
+    } else if (kind === "swatch") {
+      var swatch = event.target.closest("i");
+      if (!swatch) return;
+      toy.querySelectorAll("i").forEach(function (dot) { dot.classList.toggle("on", dot === swatch); });
+    } else {
+      toy.classList.toggle("on");
+    }
+  });
+
+  // Pieces lean away from the pointer, like objects nudged on a table.
+  var REACH = 150;
+  var MAX_PUSH = 26;
+  var stage = document.querySelector(".hero__stage");
+  var parts = Array.prototype.slice.call(stage.querySelectorAll(".part"));
+  var canHover = window.matchMedia("(hover: hover)").matches;
+
+  if (!reduceMotion && canHover) {
+    stage.parentElement.addEventListener("pointermove", function (event) {
+      parts.forEach(function (part) {
+        var box = part.getBoundingClientRect();
+        var dx = box.left + box.width / 2 - event.clientX;
+        var dy = box.top + box.height / 2 - event.clientY;
+        var distance = Math.hypot(dx, dy);
+        var push = part.firstElementChild;
+        if (distance > REACH || distance === 0) { push.style.transform = ""; return; }
+        var strength = (1 - distance / REACH) * MAX_PUSH;
+        push.style.transform = "translate(" + (dx / distance) * strength + "px," + (dy / distance) * strength + "px)";
+      });
+    });
+    stage.parentElement.addEventListener("pointerleave", function () {
+      parts.forEach(function (part) { part.firstElementChild.style.transform = ""; });
+    });
+  }
+
+  // Each storefront drawing assembles itself once when it scrolls into view.
+  var shops = document.querySelectorAll(".shop");
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    shops.forEach(function (shop) { shop.classList.add("is-in"); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.35 });
+    shops.forEach(function (shop) { observer.observe(shop); });
+  }
 })();
 </script>
 </body>
