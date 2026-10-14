@@ -336,16 +336,31 @@ html[data-lang="en"] .sec__title { letter-spacing: 0; }
 .shop__row > :nth-child(2) { transition-delay: 0.3s; }
 .shop__row > :nth-child(3) { transition-delay: 0.38s; }
 
-/* skills */
-.skills { display: grid; grid-template-columns: repeat(3, 1fr); }
-.skill { padding: clamp(24px, 3vw, 40px) var(--pad); }
-.skill + .skill { border-left: 1px solid var(--line-soft); }
-.skill__name { margin: 0; font-size: 24px; font-weight: 300; line-height: 1.3; }
-.skill__lead { margin: 6px 0 14px; font-size: 14px; color: var(--ink-soft); }
-.skill ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 15px; line-height: 1.7; }
-.skill li { padding-top: 10px; border-top: 1px solid var(--line-soft); }
-.stack { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-soft); }
-.stack li { padding: 12px var(--pad); border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
+/* skills: one row per area. The work clients ask for most sits large; the rest sits small beneath it */
+.cap { display: grid; grid-template-columns: minmax(240px, 34%) 1fr; border-bottom: 1px solid var(--line); }
+.cap:last-child { border-bottom: 0; }
+.cap__head {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: clamp(24px, 3vw, 40px) var(--pad); border-right: 1px solid var(--line-soft);
+}
+.cap__name { margin: 0; font-size: clamp(28px, 2.6vw, 38px); font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; }
+.cap__lead { margin: 0; max-width: 22em; font-size: 15px; line-height: 1.75; color: var(--ink-soft); }
+.cap__tools { margin-top: auto; padding-top: 16px; }
+.cap__tools-label { margin: 0 0 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--ink-soft); }
+.cap__tools ul {
+  margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px 16px;
+  font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.cap__body { min-width: 0; padding: clamp(24px, 3vw, 40px) var(--pad); }
+.cap__main { margin: 0; padding: 0; list-style: none; }
+.cap__main li { padding: 14px 0; border-top: 1px solid var(--line-soft); font-size: clamp(18px, 1.5vw, 22px); line-height: 1.5; text-wrap: balance; }
+.cap__main li:first-child { padding-top: 0; border-top: 0; }
+.cap__more {
+  margin: 14px 0 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; border-top: 1px solid var(--line);
+}
+.cap__more li { padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 14px; line-height: 1.65; }
+.cap__note { margin: 18px 0 0; font-weight: 500; }
 
 /* process */
 .steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); counter-reset: step; }
@@ -418,8 +433,6 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
   .steps li + li { border-left: 0; }
   .steps li { border-bottom: 1px solid var(--line-soft); }
   .steps li:nth-child(even) { border-left: 1px solid var(--line-soft); }
-  .skills { grid-template-columns: 1fr; }
-  .skill + .skill { border-left: 0; border-top: 1px solid var(--line-soft); }
   .contact__deco { display: none; }
 }
 @media (max-width: 860px) {
@@ -429,8 +442,9 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
   .sec__head { border-right: 0; border-bottom: 1px solid var(--line-soft); }
   .hero__grid { grid-template-columns: 1fr; }
   .hero__grid > * + * { border-left: 0; border-top: 1px solid var(--line-on-moss); }
-  .work { grid-template-columns: 1fr; }
+  .work, .cap { grid-template-columns: 1fr; }
   .work__art { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .cap__head { border-right: 0; border-bottom: 1px solid var(--line-soft); }
   .work__meta { grid-template-columns: 1fr; }
   .work__meta > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-soft); }
   .price, .about { grid-template-columns: 1fr; }
@@ -444,6 +458,7 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
 @media (max-width: 560px) {
   .steps { grid-template-columns: 1fr; }
   .steps li:nth-child(even) { border-left: 0; }
+  .cap__more { grid-template-columns: 1fr; }
   .part--md { display: none; }
   .hero__stage { height: 260px; }
 }
@@ -729,44 +744,69 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
     <p class="sec__note"><span data-l="ja">デザインはいただく前提で、実装から公開後の計測までを受け持ちます。</span><span data-l="en">You bring the design. I handle the build, the launch and the tracking after it.</span></p>
   </div>
   <div class="sec__body">
-    <div class="skills">
-      <div class="skill">
-        <h3 class="skill__name"><span data-l="ja">組む</span><span data-l="en">Build</span></h3>
-        <p class="skill__lead"><span data-l="ja">HTML／CSS／JavaScript／Liquid</span><span data-l="en">HTML, CSS, JavaScript and Liquid</span></p>
-        <ul>
+    <div class="cap">
+      <div class="cap__head">
+        <h3 class="cap__name"><span data-l="ja">組む</span><span data-l="en">Build</span></h3>
+        <p class="cap__lead"><span data-l="ja">デザインどおりに組み、管理画面から更新できる形でお渡しします。</span><span data-l="en">Built as designed, and handed over so your team can edit it in the admin.</span></p>
+        <div class="cap__tools">
+          <p class="cap__tools-label"><span data-l="ja">使う道具</span><span data-l="en">Tools</span></p>
+          <ul><li>Shopify</li><li>Liquid</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Figma</li><li>Git</li><li>AWS</li></ul>
+        </div>
+      </div>
+      <div class="cap__body">
+        <ul class="cap__main">
           <li><span data-l="ja">Figmaのデザインからのコーディング（PC・スマートフォン）</span><span data-l="en">Coding from Figma, for desktop and mobile</span></li>
-          <li><span data-l="ja">タブ、カルーセル、モーダル、カウントダウンなどのUI部品</span><span data-l="en">UI parts such as tabs, carousels, modals and countdowns</span></li>
           <li><span data-l="ja">Online Store 2.0のテーマ改修と、管理画面で編集できるセクション</span><span data-l="en">Online Store 2.0 theme work and editor-friendly sections</span></li>
+        </ul>
+        <ul class="cap__more">
+          <li><span data-l="ja">タブ、カルーセル、モーダル、カウントダウンなどのUI部品</span><span data-l="en">UI parts such as tabs, carousels, modals and countdowns</span></li>
           <li><span data-l="ja">表示崩れやスマートフォン特有の不具合の修正</span><span data-l="en">Fixing layout breaks and mobile-only bugs</span></li>
           <li><span data-l="ja">メタフィールド・メタオブジェクトのデータ設計</span><span data-l="en">Data design with metafields and metaobjects</span></li>
           <li><span data-l="ja">新規ストアの立ち上げ（アカウント作成から公開まで）</span><span data-l="en">New store setup, from account creation to launch</span></li>
         </ul>
       </div>
-      <div class="skill">
-        <h3 class="skill__name"><span data-l="ja">測って伸ばす</span><span data-l="en">Measure and grow</span></h3>
-        <p class="skill__lead"><span data-l="ja">作ったものが売上につながっているかを見ます</span><span data-l="en">Checking that what we built actually sells</span></p>
-        <ul>
+    </div>
+    <div class="cap">
+      <div class="cap__head">
+        <h3 class="cap__name"><span data-l="ja">測って伸ばす</span><span data-l="en">Measure and grow</span></h3>
+        <p class="cap__lead"><span data-l="ja">作ったものが売上につながっているかを見ます。</span><span data-l="en">Checking that what we built actually sells.</span></p>
+        <div class="cap__tools">
+          <p class="cap__tools-label"><span data-l="ja">使う道具</span><span data-l="en">Tools</span></p>
+          <ul><li>GTM</li><li>GA4</li><li>Custom Pixels</li><li>Shopify Flow</li></ul>
+        </div>
+      </div>
+      <div class="cap__body">
+        <ul class="cap__main">
           <li><span data-l="ja">GTM・GA4・Custom Pixelsの計測設計</span><span data-l="en">Tracking with GTM, GA4 and Custom Pixels</span></li>
-          <li><span data-l="ja">Meta・Google・Yahoo!広告のコンバージョン計測の設計</span><span data-l="en">Conversion tracking design for Meta, Google and Yahoo! ads</span></li>
           <li><span data-l="ja">表示速度とCore Web Vitalsの改善</span><span data-l="en">Page speed and Core Web Vitals</span></li>
+        </ul>
+        <ul class="cap__more">
+          <li><span data-l="ja">Meta・Google・Yahoo!広告のコンバージョン計測の設計</span><span data-l="en">Conversion tracking design for Meta, Google and Yahoo! ads</span></li>
           <li><span data-l="ja">会員ランク・ポイント・クーポン交換の実装</span><span data-l="en">Member tiers, points and coupon exchange</span></li>
           <li><span data-l="ja">Shopify Flowでの自動化、アプリの選定と置き換え</span><span data-l="en">Automation with Shopify Flow, choosing and replacing apps</span></li>
         </ul>
       </div>
-      <div class="skill">
-        <h3 class="skill__name"><span data-l="ja">AIで速く</span><span data-l="en">Faster with AI</span></h3>
-        <p class="skill__lead"><span data-l="ja">Claude Codeを毎日の開発で使っています</span><span data-l="en">I use Claude Code every working day</span></p>
-        <ul>
+    </div>
+    <div class="cap">
+      <div class="cap__head">
+        <h3 class="cap__name"><span data-l="ja">AIで速く</span><span data-l="en">Faster with AI</span></h3>
+        <p class="cap__lead"><span data-l="ja">Claude Codeを毎日の開発で使っています。</span><span data-l="en">I use Claude Code every working day.</span></p>
+        <div class="cap__tools">
+          <p class="cap__tools-label"><span data-l="ja">使う道具</span><span data-l="en">Tools</span></p>
+          <ul><li>Claude Code</li><li>Playwright</li></ul>
+        </div>
+      </div>
+      <div class="cap__body">
+        <ul class="cap__main">
           <li><span data-l="ja">仕様書づくり、実装、Playwrightでの動作確認を役割で分けて回す開発の仕組み</span><span data-l="en">A workflow that splits specs, building and Playwright testing into separate roles</span></li>
+        </ul>
+        <ul class="cap__more">
           <li><span data-l="ja">Shopifyの案件ごとに、ルール・スキル・サブエージェントをそろえる標準セットアップ</span><span data-l="en">A standard setup of rules, skills and sub-agents for each Shopify project</span></li>
           <li><span data-l="ja">デザイナーとの確認と修正を速くする、デザインレビューツールの自作</span><span data-l="en">A home-made design review tool that speeds up rounds with designers</span></li>
-          <li><span data-l="ja">ただし最後の確認は、必ず自分の手でやり切ります</span><span data-l="en">The final check is always done by hand</span></li>
         </ul>
+        <p class="cap__note"><span data-l="ja">ただし最後の確認は、必ず自分の手でやり切ります。</span><span data-l="en">The final check is always done by hand.</span></p>
       </div>
     </div>
-    <ul class="stack" aria-label="使える技術">
-      <li>Shopify</li><li>Liquid</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Figma</li><li>GTM</li><li>GA4</li><li>Custom Pixels</li><li>Shopify Flow</li><li>Git</li><li>Claude Code</li><li>Playwright</li><li>AWS</li>
-    </ul>
   </div>
 </section>
 
@@ -868,7 +908,7 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
 
 <section class="sec" id="about" aria-labelledby="about-title">
   <div class="sec__head">
-    <h2 class="sec__title" id="about-title"><span data-l="ja">人となり</span><span data-l="en">About me</span></h2>
+    <h2 class="sec__title" id="about-title"><span data-l="ja">趣味と暮らし</span><span data-l="en">Outside work</span></h2>
   </div>
   <div class="sec__body">
     <div class="about">
