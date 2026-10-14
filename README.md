@@ -7,7 +7,7 @@ Shopifyフロントエンドエンジニアの個人ポートフォリオです�
 - **作品の図**: スクリーンショットは使わない。各ストアをCSSで描いた小さなお店の図にしていて、画面に入ると組み上がる
 - **言語**: 日本語と英語を切り替えられる。文言は `data-l="ja"` と `data-l="en"` の要素に両方持っている
 - **テーマ**: ライト／ダーク。OSの設定に従い、ボタンでも切り替えられる。選んだものは localStorage に保存する
-- **フォント**: Google Fonts の Bricolage Grotesque（名前・数字）と Zen Kaku Gothic New（本文）
+- **フォント**: almond.studio の書体に寄せた Google Fonts。Hanken Grotesk（本文）、Archivo の幅を狭めたもの（名前・見出し・数字）、Newsreader（英語の一文）、Fragment Mono（ラベル）。和文は Noto Sans JP
 - **技術**: 素の HTML / CSS / JS。ビルドは不要
 - **ホスティング**: GitHub Pages
 
