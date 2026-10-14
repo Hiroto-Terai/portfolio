@@ -20,6 +20,7 @@
     var lang = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang");
     if (lang === "en" || lang === "ja") { root.dataset.lang = lang; root.lang = lang; }
   } catch (e) {}
+  if (!root.dataset.lang) root.dataset.lang = "ja";
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +48,7 @@
   --pad: clamp(16px, 3vw, 40px);
   --font-display: "Bricolage Grotesque", "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
   --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -62,6 +64,7 @@
     --line-on-moss: rgba(238, 242, 230, 0.3);
     --outline: #141B11;
     --focus: #F6C445;
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
@@ -77,6 +80,7 @@
   --line-on-moss: rgba(238, 242, 230, 0.3);
   --outline: #141B11;
   --focus: #F6C445;
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -321,8 +325,8 @@ html[data-lang="en"] .sec__title { font-family: var(--font-display); font-weight
 .shop > *, .shop__row > * {
   transition: transform 0.7s cubic-bezier(0.2, 1.3, 0.4, 1), opacity 0.4s;
 }
-.js .shop:not(.is-in) > * { opacity: 0; transform: translate(var(--sx, 0), var(--sy, -40px)) rotate(var(--sr, 10deg)); }
-.js .shop:not(.is-in) .shop__row > * { opacity: 0; transform: translateY(40px) rotate(-12deg); }
+.shop.is-out > * { opacity: 0; transform: translate(var(--sx, 0), var(--sy, -40px)) rotate(var(--sr, 10deg)); }
+.shop.is-out .shop__row > * { opacity: 0; transform: translateY(40px) rotate(-12deg); }
 .shop__bar { --sx: -30px; --sy: -50px; --sr: -14deg; }
 .shop__hero { --sx: 40px; --sy: -30px; --sr: 8deg; transition-delay: 0.1s; }
 .shop__row > :nth-child(1) { transition-delay: 0.22s; }
@@ -446,7 +450,7 @@ html[data-lang="en"] .contact__title { font-family: var(--font-display); font-we
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .part__body, .t-dots i { animation: none; }
-  .part__push, .shop > *, .shop__row > * { transition: none; }
+  .part__push { transition: none; }
 }
 </style>
 </head>
@@ -1020,19 +1024,24 @@ html[data-lang="en"] .contact__title { font-family: var(--font-display); font-we
     });
   }
 
-  // Each storefront drawing assembles itself once when it scrolls into view.
-  var shops = document.querySelectorAll(".shop");
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    shops.forEach(function (shop) { shop.classList.add("is-in"); });
-  } else {
+  // A storefront drawing that starts below the fold is taken apart, then assembles once it scrolls in.
+  // Drawings already on screen stay as they are, so the page is complete without scrolling.
+  var ASSEMBLE_AT = 0.35;
+  if (!reduceMotion && "IntersectionObserver" in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-in");
-        observer.unobserve(entry.target);
+        var shop = entry.target;
+        if (!shop.dataset.seen) {
+          shop.dataset.seen = "1";
+          if (entry.intersectionRatio === 0) { shop.classList.add("is-out"); return; }
+        }
+        if (entry.intersectionRatio >= ASSEMBLE_AT || !shop.classList.contains("is-out")) {
+          shop.classList.remove("is-out");
+          observer.unobserve(shop);
+        }
       });
-    }, { threshold: 0.35 });
-    shops.forEach(function (shop) { observer.observe(shop); });
+    }, { threshold: [0, ASSEMBLE_AT] });
+    document.querySelectorAll(".shop").forEach(function (shop) { observer.observe(shop); });
   }
 })();
 </script>
