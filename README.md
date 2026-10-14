@@ -22,6 +22,7 @@ python3 -m http.server 8000
 
 ```
 index.html   1ファイル完結（CSS/JS インライン）
+DESIGN.md    設計書（色・書体・レイアウト・使わないもの）
 .nojekyll    GitHub Pages の Jekyll 処理を無効化
 ```
 
