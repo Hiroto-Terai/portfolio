@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ja" data-lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>会員限定セールの入口をトップに出した | 寺井 啓人</title>
+<meta name="description" content="前職のECで、会員限定セールを対象者以外に見せない作りから、トップに大きく出して登録を促す動線に変えた事例。2日間で新規会員1,000名超。">
+<meta property="og:title" content="会員限定セールの入口をトップに出した | 寺井 啓人">
+<meta property="og:description" content="会員限定セールを隠さずトップに出し、会員登録を入口にした。2日間で新規会員1,000名超。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hiroto-terai.github.io/portfolio/cases/keboz-members-sale.html">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#4B6541">
+<script>
+(function () {
+  var root = document.documentElement;
+  try {
+    var theme = localStorage.getItem("theme");
+    if (theme === "dark" || theme === "light") root.dataset.theme = theme;
+    var lang = new URLSearchParams(location.search).get("lang") || localStorage.getItem("lang");
+    if (lang === "en" || lang === "ja") { root.dataset.lang = lang; root.lang = lang; }
+  } catch (e) {}
+  if (!root.dataset.lang) root.dataset.lang = "ja";
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,500&family=Fragment+Mono&family=Hanken+Grotesk:wght@300..600&family=Newsreader:opsz,wght@6..72,300&family=Noto+Sans+JP:wght@300..600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #EEF2E6;
+  --ink: #1C2418;
+  --ink-soft: #4A5644;
+  --moss: #4B6541;
+  --moss-deep: #3F5737;
+  --on-moss: #F2F6EB;
+  --on-moss-soft: #CFDAC4;
+  --line: #1C2418;
+  --line-soft: rgba(28, 36, 24, 0.16);
+  --line-on-moss: rgba(242, 246, 235, 0.4);
+  --sun: #F6C445;
+  --tomato: #EA5B3F;
+  --sky: #4F7FE3;
+  --peach: #F3A6B9;
+  --white: #FFFFFF;
+  --outline: #1C2418;
+  --focus: #4F7FE3;
+  --pad: clamp(16px, 3vw, 40px);
+  /* almond.studio の書体（ABC Social / 同 Condensed / HW Cigars / GT America Mono）は有料なので、
+     字幅と字高が近い無料の書体で置き換えている。和文はどれも Noto Sans JP に落ちる */
+  --font-sans: "Hanken Grotesk", "Noto Sans JP", sans-serif;
+  --font-condensed: "Archivo", "Noto Sans JP", sans-serif;
+  --font-serif: "Newsreader", "Noto Sans JP", serif;
+  --font-mono: "Fragment Mono", "Noto Sans JP", monospace;
+  --condensed-width: 78%;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1E2919;
+    --ink: #E7EDDE;
+    --ink-soft: #B3C0A7;
+    --moss: #3D5535;
+    --moss-deep: #33492C;
+    --on-moss: #EEF2E6;
+    --on-moss-soft: #C3D1B6;
+    --line: #E7EDDE;
+    --line-soft: rgba(231, 237, 222, 0.18);
+    --line-on-moss: rgba(238, 242, 230, 0.3);
+    --outline: #141B11;
+    --focus: #F6C445;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1E2919;
+  --ink: #E7EDDE;
+  --ink-soft: #B3C0A7;
+  --moss: #3D5535;
+  --moss-deep: #33492C;
+  --on-moss: #EEF2E6;
+  --on-moss-soft: #C3D1B6;
+  --line: #E7EDDE;
+  --line-soft: rgba(231, 237, 222, 0.18);
+  --line-on-moss: rgba(238, 242, 230, 0.3);
+  --outline: #141B11;
+  --focus: #F6C445;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+html[data-lang="ja"] [data-l="en"],
+html[data-lang="en"] [data-l="ja"] { display: none !important; }
+html[data-lang="en"] body { letter-spacing: 0; line-height: 1.65; }
+html[data-lang="ja"] body { word-break: auto-phrase; line-break: strict; }
+/* 和文の中の英単語だけがセリフになると浮くので、日本語表示ではセリフの役も和文と同じゴシックにする */
+html[data-lang="ja"] { --font-serif: var(--font-sans); }
+
+.skip {
+  position: absolute; left: 8px; top: -100px; z-index: 100;
+  background: var(--sun); color: #1C2418; padding: 8px 14px;
+}
+.skip:focus { top: 8px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- header ---------- */
+.bar {
+  position: sticky; top: 0; z-index: 50;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 24px;
+  padding: 0 var(--pad); height: 60px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.bar__name { text-decoration: none; font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; font-size: 18px; text-transform: uppercase; letter-spacing: 0.01em; white-space: nowrap; }
+.bar__nav { display: flex; justify-content: flex-end; gap: clamp(12px, 2vw, 28px); font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; }
+.bar__nav a { text-decoration: none; padding: 4px 0; background: linear-gradient(var(--ink), var(--ink)) 0 100% / 0 1px no-repeat; transition: background-size 0.25s; }
+.bar__nav a:hover { background-size: 100% 1px; }
+.bar__tools { display: flex; gap: 8px; }
+.chip-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 40px; height: 34px; padding: 0 12px;
+  border: 1px solid var(--line); background: transparent;
+  cursor: pointer; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px;
+}
+.chip-btn:hover { background: var(--ink); color: var(--paper); }
+.chip-btn svg { width: 16px; height: 16px; }
+.icon-moon { display: none; }
+html[data-theme="dark"] .icon-sun { display: none; }
+html[data-theme="dark"] .icon-moon { display: block; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .icon-sun { display: none; }
+  html:not([data-theme="light"]) .icon-moon { display: block; }
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 28px;
+  background: var(--sun); color: #1C2418; text-decoration: none; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px;
+  border: 0; transition: background 0.2s, color 0.2s; cursor: pointer;
+}
+.btn:hover { background: var(--on-moss); }
+.btn svg { width: 18px; height: 18px; }
+.link-out {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px;
+  text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px;
+}
+.link-out svg { width: 14px; height: 14px; }
+
+/* ---------- sections ---------- */
+.sec {
+  display: grid; grid-template-columns: minmax(180px, 22%) 1fr;
+  border-top: 1px solid var(--line);
+}
+.sec__head { padding: clamp(28px, 4vw, 56px) var(--pad); border-right: 1px solid var(--line); }
+.sec__title { margin: 0; font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; font-size: clamp(26px, 2.6vw, 36px); line-height: 1.3; text-transform: uppercase; letter-spacing: 0.04em; }
+html[data-lang="en"] .sec__title { letter-spacing: 0; }
+.sec__note { margin: 12px 0 0; font-size: 14px; color: var(--ink-soft); }
+.sec__body { min-width: 0; }
+.sec__intro { margin: 0; padding: clamp(28px, 4vw, 56px) var(--pad) 0; max-width: 40em; }
+.contact { background: var(--moss); color: var(--on-moss); padding: clamp(56px, 8vw, 120px) var(--pad); border-top: 1px solid var(--line); position: relative; overflow: hidden; }
+.contact__title { margin: 0; font-family: var(--font-serif); font-size: clamp(34px, 4.6vw, 68px); line-height: 1.3; font-weight: 300; }
+html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em; }
+.contact p { max-width: 34em; color: var(--on-moss-soft); margin: 18px 0 30px; }
+.contact__row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
+.copy-btn { border: 0; background: transparent; color: inherit; padding: 4px 0; cursor: pointer; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+.copy-btn:hover { text-decoration-thickness: 2px; }
+.copy-btn .done { display: none; }
+.copy-btn.is-done .done { display: inline; }
+.copy-btn.is-done .idle { display: none; }
+.contact__deco { position: absolute; right: var(--pad); top: 50%; transform: translateY(-50%); display: grid; gap: 14px; justify-items: end; }
+
+.foot { display: flex; justify-content: space-between; gap: 16px; padding: 18px var(--pad); font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; border-top: 1px solid var(--line-on-moss); background: var(--moss-deep); color: var(--on-moss-soft); }
+.foot a { color: var(--on-moss); }
+
+/* ---------- case page ---------- */
+.case-top { display: grid; grid-template-columns: minmax(220px, 26%) 1fr; border-bottom: 1px solid var(--line); }
+.case-meta { margin: 0; padding: clamp(28px, 4vw, 56px) var(--pad); border-right: 1px solid var(--line); display: grid; align-content: start; gap: 0; }
+.case-meta > div { padding: 12px 0; border-top: 1px solid var(--line-soft); }
+.case-meta > div:first-child { border-top: 0; padding-top: 0; }
+.case-meta dt { font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; color: var(--ink-soft); }
+.case-meta dd { margin: 2px 0 0; font-size: 15px; font-weight: 500; }
+.case-head { padding: clamp(32px, 5vw, 80px) var(--pad); }
+.case-title { margin: 0; font-family: var(--font-serif); font-weight: 300; font-size: clamp(32px, 4.6vw, 64px); line-height: 1.3; letter-spacing: 0.01em; text-wrap: balance; max-width: 18em; }
+html[data-lang="en"] .case-title { line-height: 1.12; letter-spacing: -0.01em; }
+.case-lead { margin: 24px 0 0; max-width: 36em; }
+.back { display: inline-block; margin-bottom: 22px; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+
+/* before / after drawing */
+.ba { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+.ba__side { padding: clamp(24px, 3vw, 40px) var(--pad) clamp(24px, 3vw, 36px); }
+.ba__side + .ba__side { border-left: 1px solid var(--line); }
+.ba__tag { margin: 0 0 14px; font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; display: flex; justify-content: space-between; gap: 12px; }
+.ba__tag span:last-child { color: var(--ink-soft); }
+.ba__cap { margin: 16px 0 0; font-size: 14px; line-height: 1.75; max-width: 28em; }
+.pg { border: 1px solid var(--line); background: var(--white); color: #1C2418; display: grid; grid-template-rows: auto auto auto; aspect-ratio: 5 / 4; overflow: hidden; position: relative; }
+.pg__bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid rgba(28,36,24,0.18); }
+.pg__bar b { width: 54px; height: 8px; background: #1C2418; }
+.pg__bar i { width: 26px; height: 4px; background: rgba(28,36,24,0.3); }
+.pg__bar i:first-of-type { margin-left: auto; }
+.pg__hero { margin: 12px; background: #E9DFD0; display: grid; align-content: center; justify-items: start; gap: 8px; padding: 0 18px; min-height: 96px; }
+.pg__hero em { display: block; width: 46%; height: 10px; background: rgba(28,36,24,0.55); font-style: normal; }
+.pg__hero em + em { width: 30%; height: 6px; background: rgba(28,36,24,0.3); }
+.pg__tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px 12px; align-self: end; }
+.pg__tiles span { aspect-ratio: 1 / 1; background: #F0EBE2; border: 1px solid rgba(28,36,24,0.14); position: relative; }
+.pg__tiles span::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: 8px; height: 5px; background: rgba(28,36,24,0.3); }
+.pg__door { position: absolute; right: 12px; bottom: 12px; width: 31%; aspect-ratio: 1 / 1; border: 1.5px dashed rgba(28,36,24,0.55); display: grid; place-items: center; background: rgba(255,255,255,0.85); }
+.pg__door svg { width: 34%; height: auto; }
+.pg__door span { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; font-size: 11px; line-height: 1.3; font-weight: 500; }
+.pg__banner { margin: 12px 12px 0; background: var(--tomato); color: #1C2418; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 14px 16px; }
+.pg__banner strong { display: block; font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; font-size: clamp(18px, 2.2vw, 28px); line-height: 1.2; }
+.pg__banner small { display: block; margin-top: 2px; font-size: 12px; line-height: 1.4; }
+.pg__banner b { background: #1C2418; color: #fff; padding: 8px 12px; font-family: var(--font-mono); font-weight: 400; font-size: 11px; white-space: nowrap; }
+.pg--after .pg__hero { min-height: 56px; margin-top: 10px; }
+
+/* body of the case */
+.case-body { padding: clamp(28px, 4vw, 56px) var(--pad); max-width: 46em; }
+.case-body p { margin: 0 0 1.2em; }
+.case-body p:last-child { margin-bottom: 0; }
+.case-list { margin: 0; padding: 0; list-style: none; }
+.case-list li { padding: 14px 0; border-top: 1px solid var(--line-soft); }
+.case-list li:first-child { border-top: 0; padding-top: 0; }
+.case-list strong { font-weight: 500; }
+.proof { display: grid; grid-template-columns: auto 1fr; gap: 0 clamp(24px, 4vw, 56px); align-items: end; padding: clamp(28px, 4vw, 56px) var(--pad); }
+.proof__num { margin: 0; font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; font-size: clamp(64px, 11vw, 160px); line-height: 0.9; letter-spacing: -0.01em; }
+.proof__num small { font-family: var(--font-mono); font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; margin-left: 8px; }
+.proof__what { margin: 0; max-width: 28em; }
+.proof__what span + span { display: block; margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+html[data-lang="ja"] .proof__what [data-l="ja"] + [data-l="ja"] { display: block; }
+
+@media (max-width: 860px) {
+  .bar { grid-template-columns: 1fr auto; }
+  .bar__nav { display: none; }
+  .sec { grid-template-columns: 1fr; }
+  .sec__head { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .case-top { grid-template-columns: 1fr; }
+  .case-meta { border-right: 0; border-bottom: 1px solid var(--line-soft); grid-template-columns: 1fr 1fr; gap: 0 20px; }
+  .case-meta > div:nth-child(2) { border-top: 0; padding-top: 0; }
+  .ba { grid-template-columns: 1fr; }
+  .ba__side + .ba__side { border-left: 0; border-top: 1px solid var(--line); }
+  .proof { grid-template-columns: 1fr; gap: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main"><span data-l="ja">本文へ</span><span data-l="en">Skip to content</span></a>
+
+<header class="bar">
+  <a class="bar__name" href="../"><span data-l="ja">寺井 啓人</span><span data-l="en">Hiroto Terai</span></a>
+  <nav class="bar__nav" aria-label="ページ内">
+    <a href="#problem"><span data-l="ja">課題</span><span data-l="en">Problem</span></a>
+    <a href="#change"><span data-l="ja">やったこと</span><span data-l="en">What I did</span></a>
+    <a href="#result"><span data-l="ja">結果</span><span data-l="en">Result</span></a>
+    <a href="#contact"><span data-l="ja">連絡</span><span data-l="en">Contact</span></a>
+  </nav>
+  <div class="bar__tools">
+    <button class="chip-btn" type="button" data-action="lang">
+      <span data-l="ja" aria-hidden="true">EN</span><span data-l="en" aria-hidden="true">JA</span>
+      <span class="sr-only" data-l="ja">Switch to English</span><span class="sr-only" data-l="en">日本語に切り替え</span>
+    </button>
+    <button class="chip-btn" type="button" data-action="theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+      <span class="sr-only" data-l="ja">明るさを切り替え</span><span class="sr-only" data-l="en">Toggle dark mode</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="case-top" aria-labelledby="case-title">
+  <dl class="case-meta">
+    <div><dt><span data-l="ja">立場</span><span data-l="en">Role</span></dt><dd><span data-l="ja">前職（EC統括）</span><span data-l="en">Previous job, head of e-commerce</span></dd></div>
+    <div><dt><span data-l="ja">時期</span><span data-l="en">When</span></dt><dd><span data-l="ja">入社した年のセール</span><span data-l="en">A sale in my first year</span></dd></div>
+    <div><dt><span data-l="ja">担当</span><span data-l="en">Scope</span></dt><dd><span data-l="ja">導線の設計、トップのバナー、案内の配置</span><span data-l="en">Flow design, top-page banner, placement of the guidance</span></dd></div>
+    <div><dt><span data-l="ja">お店</span><span data-l="en">Store</span></dt><dd><span data-l="ja">KEBOZ（アパレル）</span><span data-l="en">KEBOZ, apparel</span></dd></div>
+  </dl>
+  <div class="case-head">
+    <a class="back" href="../#work"><span data-l="ja">実績の一覧へ戻る</span><span data-l="en">Back to work</span></a>
+    <h1 class="case-title" id="case-title"><span data-l="ja">会員限定セールの入口を、トップページの真ん中に出した</span><span data-l="en">I put the entrance to a members-only sale in the middle of the front page</span></h1>
+    <p class="case-lead"><span data-l="ja">対象者以外には見せない作りだった会員限定セールを、トップに大きく出して「登録すれば入れます」と案内する形に変えました。2日間のセールで、新規会員が1,000名を超えました。</span><span data-l="en">The members-only sale used to stay out of sight for everyone else. I showed it large on the front page and told visitors they could get in by signing up. Over two days, more than 1,000 people joined.</span></p>
+  </div>
+</section>
+
+<section class="ba" aria-label="before and after">
+  <div class="ba__side">
+    <p class="ba__tag"><span data-l="ja">前</span><span data-l="en">Before</span><span data-l="ja">対象者にだけ見える</span><span data-l="en">Visible to members only</span></p>
+    <div class="pg" aria-hidden="true">
+      <div class="pg__bar"><b></b><i></i><i></i></div>
+      <div class="pg__hero"><em></em><em></em></div>
+      <div class="pg__tiles"><span></span><span></span><span></span></div>
+      <div class="pg__door">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <span><span data-l="ja">セール会場</span><span data-l="en">Sale</span></span>
+      </div>
+    </div>
+    <p class="ba__cap"><span data-l="ja">セールの告知もページも、対象者以外には見せない作り。登録していない人は、セールがあることに触れる場所がありませんでした。</span><span data-l="en">Neither the announcement nor the sale page was shown to anyone else, so a non-member had nowhere to even run into the sale.</span></p>
+  </div>
+  <div class="ba__side">
+    <p class="ba__tag"><span data-l="ja">後</span><span data-l="en">After</span><span data-l="ja">トップに出して、登録で入れる</span><span data-l="en">On the front page, open with sign-up</span></p>
+    <div class="pg pg--after" aria-hidden="true">
+      <div class="pg__bar"><b></b><i></i><i></i></div>
+      <div class="pg__banner">
+        <div><strong><span data-l="ja">会員限定セール</span><span data-l="en">Members-only sale</span></strong><small><span data-l="ja">会員登録すれば、会場に入れます</span><span data-l="en">Sign up and you're in</span></small></div>
+        <b><span data-l="ja">登録して入る</span><span data-l="en">Sign up</span></b>
+      </div>
+      <div class="pg__hero"><em></em><em></em></div>
+      <div class="pg__tiles"><span></span><span></span><span></span></div>
+    </div>
+    <p class="ba__cap"><span data-l="ja">トップの一番上に、セールのバナーを大きく表示。「登録すれば会場に入れる」という案内を、ページの要所に細かく置きました。</span><span data-l="en">A large sale banner at the very top, and a note that signing up gets you in, repeated at the points where people pause.</span></p>
+  </div>
+</section>
+
+<section class="sec" id="problem" aria-labelledby="problem-title">
+  <div class="sec__head"><h2 class="sec__title" id="problem-title"><span data-l="ja">課題</span><span data-l="en">Problem</span></h2></div>
+  <div class="sec__body"><div class="case-body">
+    <p><span data-l="ja">会員限定セールは、これまで「対象者以外には情報を見せない」形で告知とページを作っていました。会員にとっては特別感がありますが、まだ会員ではない人には、何も届きません。</span><span data-l="en">Members-only sales had always been announced and built so that only eligible people could see anything. That feels special to members, and reaches nobody else.</span></p>
+    <p><span data-l="ja">会員登録は、セールに入る前の壁になっていました。</span><span data-l="en">Signing up stood in front of the sale like a wall.</span></p>
+  </div></div>
+</section>
+
+<section class="sec" id="change" aria-labelledby="change-title">
+  <div class="sec__head"><h2 class="sec__title" id="change-title"><span data-l="ja">やったこと</span><span data-l="en">What I did</span></h2></div>
+  <div class="sec__body"><div class="case-body">
+    <ul class="case-list">
+      <li><span data-l="ja"><strong>トップに、セールのバナーを大きく出した。</strong>会員限定であることを隠さず、一番最初に目に入る場所に置いた。</span><span data-l="en"><strong>Put a large sale banner on the front page.</strong> Nothing about it was hidden: it sat where the eye lands first.</span></li>
+      <li><span data-l="ja"><strong>「会員登録すれば会場に入れる」という案内を、細かく置いた。</strong>ページを読み進める途中のあちこちに、登録の入口を置いた。</span><span data-l="en"><strong>Repeated a plain note: sign up and you're in.</strong> The way to sign up appeared at several points as people scrolled.</span></li>
+      <li><span data-l="ja"><strong>会員登録を、壁ではなく入口にした。</strong>登録する理由が、セールを見たその場で分かる形にした。</span><span data-l="en"><strong>Made signing up the door, not the wall.</strong> The reason to sign up was clear at the moment someone saw the sale.</span></li>
+    </ul>
+  </div></div>
+</section>
+
+<section class="sec" id="result" aria-labelledby="result-title">
+  <div class="sec__head"><h2 class="sec__title" id="result-title"><span data-l="ja">結果</span><span data-l="en">Result</span></h2></div>
+  <div class="sec__body">
+    <div class="proof">
+      <p class="proof__num"><span data-l="ja">1,000<small>名超</small></span><span data-l="en">1,000+<small>people</small></span></p>
+      <p class="proof__what"><span data-l="ja">2日間のセールで獲得した新規会員の数。ふだんの1か月の平均獲得数（1,000名）を、2日で超えました。</span><span data-l="en">New members gained in a two-day sale, more than the usual monthly average of 1,000 in two days.</span><span data-l="ja">この数字は新規の会員登録の数で、売上の数字ではありません。</span><span data-l="en">This counts new sign-ups, not sales.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="use" aria-labelledby="use-title">
+  <div class="sec__head"><h2 class="sec__title" id="use-title"><span data-l="ja">使える場面</span><span data-l="en">Where it applies</span></h2></div>
+  <div class="sec__body"><div class="case-body">
+    <p><span data-l="ja">会員登録が必要なお店で、登録の手前で離れてしまう人が多いとき。フォームの入力やカートの手前で止まってしまうときにも、「いまの壁を、入口に変えられないか」から考えます。</span><span data-l="en">When a store needs sign-ups and people drop off just before. The same question applies to forms and carts: can today's wall become a door?</span></p>
+    <p><span data-l="ja">Shopifyのテーマの中で、バナーや案内の置き方、会員登録までの動線を設計して実装できます。</span><span data-l="en">I can design and build the banners, the guidance and the path to sign-up inside a Shopify theme.</span></p>
+  </div></div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <h2 class="contact__title" id="contact-title"><span data-l="ja">似た課題があれば、<br>メールでご相談ください。</span><span data-l="en">Got a similar wall? Let's talk.</span></h2>
+  <p><span data-l="ja">お店の状況と時期を添えていただければ、こちらから面談の日程をご提案します。</span><span data-l="en">Tell me about your store and timing, and I'll suggest a time to talk.</span></p>
+  <div class="contact__row">
+    <a class="btn" data-mail href="mailto:hiro08051610@gmail.com?subject=%E9%9D%A2%E8%AB%87%E3%81%AE%E3%81%94%E7%9B%B8%E8%AB%87">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg>
+      <span data-l="ja">メールで相談する</span><span data-l="en">Email me</span>
+    </a>
+    <span>hiro08051610@gmail.com</span>
+    <button class="copy-btn" type="button" data-copy="hiro08051610@gmail.com"><span class="idle"><span data-l="ja">アドレスをコピー</span><span data-l="en">Copy address</span></span><span class="done"><span data-l="ja">コピーしました</span><span data-l="en">Copied</span></span></button>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span>© 2026 <span data-l="ja">寺井 啓人</span><span data-l="en">Hiroto Terai</span></span>
+  <a href="../"><span data-l="ja">ポートフォリオへ戻る</span><span data-l="en">Back to portfolio</span></a>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var META = {
+    ja: { title: "会員限定セールの入口をトップに出した | 寺井 啓人", mailSubject: "面談のご相談" },
+    en: { title: "A members-only sale on the front page | Hiroto Terai", mailSubject: "Project inquiry" }
+  };
+  function saveSetting(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+  function applyLang(lang) {
+    root.dataset.lang = lang; root.lang = lang; document.title = META[lang].title;
+    document.querySelectorAll("[data-mail]").forEach(function (link) {
+      link.href = "mailto:hiro08051610@gmail.com?subject=" + encodeURIComponent(META[lang].mailSubject);
+    });
+  }
+  function currentTheme() {
+    if (root.dataset.theme) return root.dataset.theme;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  applyLang(root.dataset.lang === "en" ? "en" : "ja");
+  document.querySelector('[data-action="lang"]').addEventListener("click", function () {
+    var next = root.dataset.lang === "en" ? "ja" : "en"; applyLang(next); saveSetting("lang", next);
+  });
+  document.querySelector('[data-action="theme"]').addEventListener("click", function () {
+    var next = currentTheme() === "dark" ? "light" : "dark"; root.dataset.theme = next; saveSetting("theme", next);
+  });
+  document.querySelectorAll("[data-copy]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(button.dataset.copy).then(function () {
+        button.classList.add("is-done");
+        setTimeout(function () { button.classList.remove("is-done"); }, 1800);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
