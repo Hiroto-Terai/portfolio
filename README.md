@@ -22,6 +22,8 @@ python3 -m http.server 8000
 
 ```
 index.html   1ファイル完結（CSS/JS インライン）
+cases/       事例の詳細ページ（1事例1ファイル。CSS/JS インライン）
+  keboz-members-sale.html   KEBOZ：会員限定セールの入口をトップに出した事例
 DESIGN.md    設計書（色・書体・レイアウト・使わないもの）
 .nojekyll    GitHub Pages の Jekyll 処理を無効化
 ```
