@@ -467,6 +467,30 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
   .part__body, .t-dots i { animation: none; }
   .part__push { transition: none; }
 }
+
+/* ---------- motion layer (added by script: html.motion) ---------- */
+.progress { position: fixed; left: 0; top: 0; z-index: 60; width: 100%; height: 4px; background: var(--tomato); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; }
+.loader { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--moss); color: var(--on-moss); clip-path: inset(0 0 0 0); }
+.loader__num { font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; font-size: clamp(96px, 22vw, 360px); line-height: 1; font-variant-numeric: tabular-nums; }
+.loader__name { position: absolute; left: var(--pad); bottom: var(--pad); font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--on-moss-soft); }
+.hero.is-held .part__body { animation-play-state: paused; }
+.hero__name .ch { display: inline-block; will-change: transform; }
+.wd { display: inline-block; white-space: nowrap; }
+.belt { overflow: hidden; padding-block: clamp(28px, 4vw, 56px); border-top: 1px solid var(--line); }
+.belt__row { display: flex; width: max-content; font-family: var(--font-condensed); font-stretch: var(--condensed-width); font-weight: 500; text-transform: uppercase; font-size: clamp(36px, 7vw, 108px); line-height: 1; padding-block: 0.18em; white-space: nowrap; }
+.belt__row span { padding-inline: 0.45em; }
+.belt__row span::after { content: "\2733"; margin-left: 0.9em; font-family: var(--font-sans); font-weight: 400; }
+.belt__row--a { background: var(--sun); color: #1C2418; transform: rotate(-1.6deg); margin-inline: -4vw; width: calc(max-content + 8vw); }
+.belt__row--b { background: var(--ink); color: var(--paper); transform: rotate(1.4deg); margin: -0.3em -4vw 0; }
+.motion .sec__title { transform-origin: 0 100%; }
+.motion #process.is-hscroll { min-height: calc(100vh - 60px); align-items: start; }
+.motion #process.is-hscroll .sec__body { overflow: hidden; }
+.steps.is-hscroll { display: flex; width: max-content; }
+.steps.is-hscroll li { width: min(34vw, 460px); min-height: 52vh; border-bottom: 0; }
+.steps.is-hscroll li h3 { font-size: clamp(22px, 2.4vw, 34px); }
+.steps.is-hscroll li p { font-size: 16px; }
+.cursor { position: fixed; left: 0; top: 0; z-index: 70; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; background: var(--tomato); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; pointer-events: none; opacity: 0; transform: scale(0.4); }
+.is-still *, .is-still *::before, .is-still *::after { animation-play-state: paused !important; }
 </style>
 </head>
 <body>
@@ -484,6 +508,9 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
     <a href="#contact"><span data-l="ja">連絡</span><span data-l="en">Contact</span></a>
   </nav>
   <div class="bar__tools">
+    <button class="chip-btn" type="button" data-action="motion" aria-pressed="false" hidden>
+      <span data-l="ja">動き停止</span><span data-l="en">PAUSE</span>
+    </button>
     <button class="chip-btn" type="button" data-action="lang">
       <span data-l="ja" aria-hidden="true">EN</span><span data-l="en" aria-hidden="true">JA</span>
       <span class="sr-only" data-l="ja">Switch to English</span><span class="sr-only" data-l="en">日本語に切り替え</span>
@@ -576,6 +603,11 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
     </div>
   </div>
 </section>
+
+<div class="belt" aria-hidden="true">
+  <div class="belt__row belt__row--a"><span>Shopify</span><span>Liquid</span><span>Figma</span><span>GA4</span><span>GTM</span><span>Claude Code</span><span>Playwright</span><span>Shopify Flow</span><span>Shopify</span><span>Liquid</span><span>Figma</span><span>GA4</span><span>GTM</span><span>Claude Code</span><span>Playwright</span><span>Shopify Flow</span></div>
+  <div class="belt__row belt__row--b"><span>Shopify Flow</span><span>Playwright</span><span>Claude Code</span><span>GTM</span><span>GA4</span><span>Figma</span><span>Liquid</span><span>Shopify</span><span>Shopify Flow</span><span>Playwright</span><span>Claude Code</span><span>GTM</span><span>GA4</span><span>Figma</span><span>Liquid</span><span>Shopify</span></div>
+</div>
 
 <section class="sec" id="results" aria-labelledby="results-title">
   <div class="sec__head">
@@ -1083,6 +1115,189 @@ html[data-lang="en"] .contact__title { line-height: 1.1; letter-spacing: -0.01em
     }, { threshold: [0, ASSEMBLE_AT] });
     document.querySelectorAll(".shop").forEach(function (shop) { observer.observe(shop); });
   }
+})();
+</script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/SplitText.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script>
+/* Full-screen motion. Every effect starts from the finished page, so with reduced motion or a failed load the page is simply the static design. */
+(function () {
+  var LOADER_SECONDS = 1.3;
+  var LOADER_GIVE_UP_MS = 5000;
+  var BELT_SECONDS = 40;
+  var HEADER_HEIGHT = 60;
+  var HSCROLL_QUERY = "(min-width: 1081px)";
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.gsap || !window.ScrollTrigger || !window.SplitText || !window.Lenis) return;
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
+  var root = document.documentElement;
+  root.classList.add("motion");
+  var loops = [];
+  var hero = document.querySelector(".hero");
+  hero.classList.add("is-held");
+
+  var lenis = new Lenis({ lerp: 0.09 });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+  gsap.ticker.lagSmoothing(0);
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var target = document.querySelector(a.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: a.getAttribute("href") === "#top" ? 0 : -HEADER_HEIGHT });
+    });
+  });
+
+  // Reading progress bar along the top edge.
+  var progress = document.createElement("div");
+  progress.className = "progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.appendChild(progress);
+  gsap.to(progress, { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: 0.2 } });
+
+  // Hero name: split into letters, they rise after the loader and drift apart as you scroll away.
+  var nameEl = document.querySelector(".hero__name [aria-hidden]");
+  var nameSplit = SplitText.create(nameEl, { type: "chars", charsClass: "ch" });
+  gsap.set(nameSplit.chars, { yPercent: 115, rotate: 10 });
+  gsap.to(nameSplit.chars, {
+    yPercent: -45, rotate: function (i) { return (i % 2 ? 1 : -1) * 7; }, ease: "none",
+    stagger: { each: 0.015 },
+    scrollTrigger: { trigger: hero, start: "top top", end: "bottom 30%", scrub: 0.5, immediateRender: false }
+  });
+
+  // Loader: counter, then the green cover lifts away.
+  var loader = document.createElement("div");
+  loader.className = "loader";
+  loader.setAttribute("aria-hidden", "true");
+  loader.innerHTML = '<span class="loader__num">000</span><span class="loader__name">Hiroto Terai</span>';
+  document.body.appendChild(loader);
+  var num = loader.querySelector(".loader__num");
+  lenis.stop();
+  var finished = false;
+  function finishIntro() { if (finished) return; finished = true; loader.remove(); lenis.start(); hero.classList.remove("is-held"); }
+  window.setTimeout(finishIntro, LOADER_GIVE_UP_MS);
+  var count = { n: 0 };
+  gsap.timeline({ onComplete: finishIntro })
+    .to(count, { n: 100, duration: LOADER_SECONDS, ease: "power2.inOut", onUpdate: function () { num.textContent = String(Math.round(count.n)).padStart(3, "0"); } })
+    .to(loader, { clipPath: "inset(0 0 100% 0)", duration: 0.9, ease: "expo.inOut" }, ">+0.1")
+    .add(function () { hero.classList.remove("is-held"); }, "<+0.35")
+    .to(nameSplit.chars, { yPercent: 0, rotate: 0, duration: 1.1, stagger: 0.04, ease: "back.out(1.5)", overwrite: "auto" }, "<+0.1");
+
+  // Hero stickers fly off at their own tilt and speed.
+  gsap.utils.toArray(".hero__stage .part").forEach(function (part, i) {
+    var dir = i % 2 ? 1 : -1;
+    gsap.to(part, {
+      x: dir * window.innerWidth * (0.12 + 0.07 * (i % 4)),
+      y: -window.innerHeight * (0.35 + 0.1 * (i % 3)),
+      rotation: dir * (28 + i * 9), ease: "none",
+      scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: 0.6 }
+    });
+  });
+
+  // Lead sentence is poured in, letter by letter, as it scrolls up.
+  var leadChars = [];
+  document.querySelectorAll(".hero__lead [data-l]").forEach(function (span) {
+    leadChars = leadChars.concat(SplitText.create(span, { type: "words,chars", wordsClass: "wd" }).chars);
+  });
+  gsap.fromTo(leadChars, { opacity: 0.18 }, {
+    opacity: 1, ease: "none", stagger: 0.06,
+    scrollTrigger: { trigger: ".hero__lead", start: "top 100%", end: "top 28%", scrub: true }
+  });
+
+  // Two tilted belts run in opposite directions and speed up while you scroll.
+  var belts = gsap.utils.toArray(".belt__row");
+  var beltTweens = belts.map(function (row, i) {
+    gsap.set(row, { xPercent: i ? -50 : 0 });
+    var tween = gsap.to(row, { xPercent: i ? 0 : -50, duration: BELT_SECONDS, ease: "none", repeat: -1 });
+    loops.push(tween);
+    return tween;
+  });
+  ScrollTrigger.create({
+    onUpdate: function (self) {
+      var boost = 1 + Math.min(Math.abs(self.getVelocity()) / 350, 6);
+      beltTweens.forEach(function (tw) { gsap.to(tw, { timeScale: boost, duration: 0.2, overwrite: true, onComplete: function () { gsap.to(tw, { timeScale: 1, duration: 1.2 }); } }); });
+    }
+  });
+
+  // Section titles spring up.
+  gsap.utils.toArray(".sec__title").forEach(function (el) {
+    gsap.from(el, { y: 80, scaleY: 1.25, opacity: 0, duration: 1.3, ease: "elastic.out(1, 0.55)", scrollTrigger: { trigger: el, start: "top 90%", once: true } });
+  });
+  ScrollTrigger.batch(".stat", {
+    start: "top 92%", once: true,
+    onEnter: function (els) { gsap.from(els, { y: 60, opacity: 0, stagger: 0.12, duration: 0.9, ease: "expo.out" }); }
+  });
+
+  // Each work opens from a rounded frame, and its drawing drifts at its own pace.
+  gsap.utils.toArray(".work").forEach(function (work) {
+    gsap.fromTo(work, { clipPath: "inset(9% 6% 9% 6% round 36px)" }, {
+      clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none",
+      scrollTrigger: { trigger: work, start: "top 95%", end: "top 35%", scrub: true }
+    });
+    var art = work.querySelector(".work__art");
+    if (art) gsap.fromTo(art, { yPercent: -6 }, { yPercent: 6, ease: "none", scrollTrigger: { trigger: work, start: "top bottom", end: "bottom top", scrub: true } });
+  });
+
+  // Process: vertical scroll becomes sideways travel (wide screens only).
+  var mm = gsap.matchMedia();
+  mm.add(HSCROLL_QUERY, function () {
+    var section = document.getElementById("process");
+    var steps = section.querySelector(".steps");
+    var body = steps.parentElement;
+    section.classList.add("is-hscroll");
+    steps.classList.add("is-hscroll");
+    function distance() { return Math.max(0, steps.offsetWidth - body.clientWidth); }
+    gsap.to(steps, {
+      x: function () { return -distance(); }, ease: "none",
+      scrollTrigger: { trigger: section, start: "top " + HEADER_HEIGHT, end: function () { return "+=" + distance(); }, pin: true, scrub: 0.5, invalidateOnRefresh: true }
+    });
+    return function () { section.classList.remove("is-hscroll"); steps.classList.remove("is-hscroll"); };
+  });
+
+  // Contact: the green panel opens out to the full width, its title lands letter by letter.
+  gsap.fromTo(".contact", { clipPath: "inset(12% 5% 0% 5% round 56px)" }, {
+    clipPath: "inset(0% 0% 0% 0% round 0px)", ease: "none",
+    scrollTrigger: { trigger: ".contact", start: "top 100%", end: "top 60%", scrub: true }
+  });
+  var titleChars = [];
+  document.querySelectorAll(".contact__title [data-l]").forEach(function (span) {
+    titleChars = titleChars.concat(SplitText.create(span, { type: "words,chars", wordsClass: "wd" }).chars);
+  });
+  gsap.from(titleChars, { yPercent: 110, opacity: 0, duration: 0.8, stagger: 0.035, ease: "back.out(1.7)", scrollTrigger: { trigger: ".contact__title", start: "top 85%", once: true } });
+  gsap.utils.toArray(".contact__deco .toy").forEach(function (toy, i) {
+    loops.push(gsap.to(toy, { y: -16, rotation: i ? -6 : 6, duration: 1.6 + i * 0.4, yoyo: true, repeat: -1, ease: "sine.inOut" }));
+  });
+
+  // A round label follows the pointer over the works.
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var cursor = document.createElement("div");
+    cursor.className = "cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.textContent = "VIEW";
+    document.body.appendChild(cursor);
+    var moveX = gsap.quickTo(cursor, "x", { duration: 0.4, ease: "power3" });
+    var moveY = gsap.quickTo(cursor, "y", { duration: 0.4, ease: "power3" });
+    var works = document.getElementById("work");
+    works.addEventListener("pointermove", function (e) { moveX(e.clientX); moveY(e.clientY); });
+    works.addEventListener("pointerenter", function () { gsap.to(cursor, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }); });
+    works.addEventListener("pointerleave", function () { gsap.to(cursor, { opacity: 0, scale: 0.4, duration: 0.25 }); });
+  }
+
+  // Controls: stop the looping motion, and refresh positions when the language changes the layout.
+  var stillButton = document.querySelector('[data-action="motion"]');
+  stillButton.hidden = false;
+  stillButton.addEventListener("click", function () {
+    var isStill = stillButton.getAttribute("aria-pressed") !== "true";
+    stillButton.setAttribute("aria-pressed", String(isStill));
+    root.classList.toggle("is-still", isStill);
+    loops.concat(beltTweens).forEach(function (tw) { tw.paused(isStill); });
+  });
+  document.querySelector('[data-action="lang"]').addEventListener("click", function () { window.setTimeout(function () { ScrollTrigger.refresh(); }, 50); });
+  window.addEventListener("load", function () { ScrollTrigger.refresh(); });
 })();
 </script>
 </body>
